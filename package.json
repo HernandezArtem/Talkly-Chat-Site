@@ -1,0 +1,19 @@
+{
+  "name": "chattr",
+  "private": true,
+  "scripts": {
+    "dev": "turbo dev",
+    "start": "pnpm --filter @chattr/server start",
+    "onboard": "pnpm --filter @chattr/server run onboard",
+    "seed-demo": "pnpm --filter @chattr/server run seed-demo",
+    "build": "turbo build",
+    "lint": "turbo lint",
+    "typecheck": "turbo typecheck",
+    "test": "vitest run"
+  },
+  "devDependencies": {
+    "turbo": "^2",
+    "vitest": "^2.1.9"
+  },
+  "packageManager": "pnpm@9.15.4"
+}

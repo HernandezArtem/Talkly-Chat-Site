@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chattr Demo</title>
+  <style>
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 40px 20px;
+      color: #1f2937;
+      background: #f9fafb;
+    }
+    h1 { font-size: 2rem; margin-bottom: 8px; }
+    p { color: #6b7280; line-height: 1.6; }
+    code {
+      background: #e5e7eb;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 0.9em;
+    }
+    pre {
+      background: #1e1e2e;
+      color: #cdd6f4;
+      padding: 16px;
+      border-radius: 8px;
+      overflow-x: auto;
+      font-size: 0.85em;
+      line-height: 1.5;
+    }
+  </style>
+</head>
+<body>
+  <h1>Chattr Demo</h1>
+  <p>
+    This page demonstrates the Chattr embeddable chatbot widget.
+    Click the chat bubble in the bottom-right corner to start a conversation.
+  </p>
+  <p>
+    To embed Chattr on your own site, add this script tag:
+  </p>
+  <pre>&lt;script
+  src="https://your-server.com/widget.js"
+  data-server="https://your-server.com"
+  data-theme-primary="#e27d60"
+  data-theme-title="Ask me anything"
+  defer
+&gt;&lt;/script&gt;</pre>
+
+  <script id="chattr-widget" src="/widget.js"
+    data-server="http://localhost:3000"
+    data-theme-primary="#e27d60"
+    data-theme-title="Chattr"
+    data-theme-subtitle="Answers from your website"
+    data-theme-avatar="/Chattr.png"></script>
+</body>
+</html>

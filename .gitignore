@@ -1,0 +1,11 @@
+node_modules
+dist
+.next
+.turbo
+.env
+.env.local
+*.db
+apps/server/data/*
+!apps/server/data/.gitkeep
+apps/server/public/widget.js
+.DS_Store

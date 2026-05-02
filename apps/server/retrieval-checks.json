@@ -1,0 +1,14 @@
+[
+  {
+    "tenantId": "default",
+    "query": "how can I contact support?",
+    "expectedSourceIncludes": ["contact"],
+    "minConfidence": "medium"
+  },
+  {
+    "tenantId": "default",
+    "query": "what is your return policy?",
+    "expectedSourceIncludes": ["return"],
+    "minConfidence": "medium"
+  }
+]

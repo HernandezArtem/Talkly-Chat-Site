@@ -1,0 +1,140 @@
+[
+  {
+    "id": "contact",
+    "tenants": ["default"],
+    "phrases": [
+      "how do i contact support",
+      "contact support",
+      "i want to call",
+      "phone number",
+      "email support",
+      "open contact page"
+    ],
+    "keywords": [
+      "contact",
+      "support",
+      "call",
+      "phone",
+      "email",
+      "helpdesk"
+    ],
+    "sourceBoosts": ["contact", "support"],
+    "titleBoosts": ["contact", "support", "help"],
+    "suggestions": {
+      "nl": [
+        "Hoe neem ik contact op?",
+        "Kan ik ook mailen?",
+        "Waar vind ik de contactpagina?"
+      ],
+      "en": [
+        "How do I contact support?",
+        "Can I also email you?",
+        "Where is the contact page?"
+      ]
+    },
+    "preferHandoff": true,
+    "minScore": 4
+  },
+  {
+    "id": "pricing",
+    "tenants": ["default"],
+    "phrases": [
+      "pricing",
+      "how much does it cost",
+      "what does it cost",
+      "pricing page",
+      "subscription price"
+    ],
+    "keywords": [
+      "pricing",
+      "price",
+      "cost",
+      "plan",
+      "plans",
+      "subscription",
+      "quote"
+    ],
+    "sourceBoosts": ["pricing", "plans", "plan"],
+    "titleBoosts": ["pricing", "plans", "price"],
+    "suggestions": {
+      "nl": [
+        "Waar vind ik de prijzen?",
+        "Zijn er verschillende plannen?",
+        "Kan ik contact opnemen over een offerte?"
+      ],
+      "en": [
+        "Where can I find pricing?",
+        "Do you offer different plans?",
+        "Can I contact you about a quote?"
+      ]
+    },
+    "minScore": 4
+  },
+  {
+    "id": "shipping",
+    "tenants": ["default"],
+    "phrases": [
+      "shipping information",
+      "delivery time",
+      "track my order",
+      "order status",
+      "when will my order arrive"
+    ],
+    "keywords": [
+      "shipping",
+      "delivery",
+      "order",
+      "tracking",
+      "shipment",
+      "arrive"
+    ],
+    "sourceBoosts": ["shipping", "delivery", "track", "order"],
+    "titleBoosts": ["shipping", "delivery", "order"],
+    "suggestions": {
+      "nl": [
+        "Wat zijn de verzendtijden?",
+        "Hoe volg ik mijn bestelling?",
+        "Met wie neem ik contact op over een levering?"
+      ],
+      "en": [
+        "What are your shipping times?",
+        "How do I track my order?",
+        "Who can I contact about a delivery?"
+      ]
+    },
+    "minScore": 4
+  },
+  {
+    "id": "returns",
+    "tenants": ["default"],
+    "phrases": [
+      "return policy",
+      "how do i return",
+      "refund request",
+      "exchange an item"
+    ],
+    "keywords": [
+      "return",
+      "returns",
+      "refund",
+      "exchange",
+      "cancel",
+      "cancellation"
+    ],
+    "sourceBoosts": ["return", "refund", "exchange"],
+    "titleBoosts": ["return", "refund", "exchange"],
+    "suggestions": {
+      "nl": [
+        "Wat is jullie retourbeleid?",
+        "Hoe vraag ik een terugbetaling aan?",
+        "Kan ik een product omruilen?"
+      ],
+      "en": [
+        "What is your return policy?",
+        "How do I request a refund?",
+        "Can I exchange an item?"
+      ]
+    },
+    "minScore": 4
+  }
+]

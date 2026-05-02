@@ -1,0 +1,13 @@
+{
+  "name": "@chattr/shared",
+  "version": "0.1.0",
+  "private": true,
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "scripts": {
+    "typecheck": "../widget/node_modules/.bin/tsc --noEmit"
+  },
+  "dependencies": {
+    "zod": "^3"
+  }
+}
