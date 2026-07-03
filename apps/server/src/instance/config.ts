@@ -2,7 +2,7 @@ import { z } from "zod";
 import {
   tenantEscalationSchema,
   tenantWidgetDefaultsSchema,
-} from "@chattr/shared";
+} from "@talkly/shared";
 import {
   partialGuardrailsConfigSchema,
   type PartialGuardrailsConfig,
@@ -42,9 +42,9 @@ export const instanceConfigSchema = z.object({
     });
   }
 });
-export type ChattrInstanceConfig = z.infer<typeof instanceConfigSchema>;
+export type TalklyInstanceConfig = z.infer<typeof instanceConfigSchema>;
 
-export function defineInstanceConfig(config: ChattrInstanceConfig): ChattrInstanceConfig {
+export function defineInstanceConfig(config: TalklyInstanceConfig): TalklyInstanceConfig {
   return config;
 }
 

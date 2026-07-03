@@ -3,7 +3,7 @@ import {
   streamDataPartSchema,
   type SourceCard,
   type StreamDataPart,
-} from "@chattr/shared";
+} from "@talkly/shared";
 
 export type ParsedStreamEvent =
   | { kind: "text"; text: string }

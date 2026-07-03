@@ -1,5 +1,5 @@
 {
-  "name": "@chattr/widget",
+  "name": "@talkly/widget",
   "version": "0.1.0",
   "private": true,
   "main": "./dist/index.global.js",
@@ -9,7 +9,7 @@
     "typecheck": "pnpm exec tsc --noEmit"
   },
   "dependencies": {
-    "@chattr/shared": "workspace:*"
+    "@talkly/shared": "workspace:*"
   },
   "devDependencies": {
     "tsup": "^8",

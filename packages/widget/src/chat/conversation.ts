@@ -1,4 +1,4 @@
-import { detectChatLanguage, matchesLanguage, type ChatLanguage } from "@chattr/shared";
+import { detectChatLanguage, matchesLanguage, type ChatLanguage } from "@talkly/shared";
 import type { EscalationConfig, WidgetHistoryMessage } from "../types";
 
 export function getCurrentConversationLanguage(

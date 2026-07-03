@@ -3,13 +3,13 @@ import {
   type TenantBootstrap,
   type TenantEscalation,
   type TenantWidgetDefaults,
-} from "@chattr/shared";
+} from "@talkly/shared";
 import { logRuntimeEvent } from "./logging";
 import type { PartialGuardrailsConfig } from "./guardrails";
-import defaultInstanceConfig from "../instance/default/chattr.config";
+import defaultInstanceConfig from "../instance/default/talkly.config";
 import {
   instanceConfigSchema,
-  type ChattrInstanceConfig,
+  type TalklyInstanceConfig,
   type InstanceTenantConfig,
 } from "../instance/config";
 
@@ -28,15 +28,15 @@ export interface TenantConfig {
 
 export type TenantRegistry = Record<string, TenantConfig>;
 
-let cachedInstanceConfig: ChattrInstanceConfig | null = null;
+let cachedInstanceConfig: TalklyInstanceConfig | null = null;
 let cachedRegistry: TenantRegistry | null = null;
 
-export function loadInstanceConfig(): ChattrInstanceConfig {
+export function loadInstanceConfig(): TalklyInstanceConfig {
   if (cachedInstanceConfig) return cachedInstanceConfig;
 
   const parsed = instanceConfigSchema.safeParse(defaultInstanceConfig);
   if (!parsed.success) {
-    throw new Error(`Invalid Chattr instance config: ${parsed.error.message}`);
+    throw new Error(`Invalid Talkly instance config: ${parsed.error.message}`);
   }
 
   cachedInstanceConfig = parsed.data;
@@ -126,4 +126,4 @@ function buildTenantConfig(tenant: InstanceTenantConfig): TenantConfig {
   };
 }
 
-export type { TenantBootstrap, ChattrInstanceConfig, InstanceTenantConfig };
+export type { TenantBootstrap, TalklyInstanceConfig, InstanceTenantConfig };

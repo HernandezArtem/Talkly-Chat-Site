@@ -1,4 +1,4 @@
-import type { ChatLanguage } from "@chattr/shared";
+import type { ChatLanguage } from "@talkly/shared";
 import type { GuardrailsConfig, GuardrailResult } from "./types";
 import { sanitizeInput, truncateHistory } from "./input";
 import { detectPromptInjection } from "./input";

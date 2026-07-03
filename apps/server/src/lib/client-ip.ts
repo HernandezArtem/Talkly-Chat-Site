@@ -3,7 +3,7 @@ import type { Context } from "hono";
 import { getEnv } from "./env";
 
 function trustProxy(): boolean {
-  const raw = getEnv("CHATTR_TRUST_PROXY");
+  const raw = getEnv("TALKLY_TRUST_PROXY");
   if (!raw) return false;
   return raw === "1" || raw.toLowerCase() === "true";
 }
@@ -11,7 +11,7 @@ function trustProxy(): boolean {
 /**
  * Resolves the remote client IP.
  *
- * When CHATTR_TRUST_PROXY is enabled, honors the first entry of
+ * When TALKLY_TRUST_PROXY is enabled, honors the first entry of
  * `X-Forwarded-For` (the original client, not the last hop). Otherwise
  * falls back to the socket remote address from the Node.js adapter.
  *

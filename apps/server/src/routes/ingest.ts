@@ -15,7 +15,7 @@ export const ingestRoute = new Hono();
 
 ingestRoute.post("/", async (c) => {
   // Check admin key
-  const adminKey = process.env.CHATTR_ADMIN_KEY;
+  const adminKey = process.env.TALKLY_ADMIN_KEY;
   if (adminKey) {
     const auth = c.req.header("Authorization");
     if (auth !== `Bearer ${adminKey}`) {

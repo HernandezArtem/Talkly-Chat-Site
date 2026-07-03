@@ -1,4 +1,4 @@
-import type { HandoffAction } from "@chattr/shared";
+import type { HandoffAction } from "@talkly/shared";
 import type { WidgetCopy } from "../../types";
 
 export function renderSuggestions(

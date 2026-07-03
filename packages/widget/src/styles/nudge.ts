@@ -100,12 +100,12 @@ export const nudgeStyles = `
       border: none;
     }
 
-    .chattr-bubble,
+    .talkly-bubble,
     .zm-bubble {
       bottom: 20px;
     }
 
-    .chattr-bubble.bottom-right,
+    .talkly-bubble.bottom-right,
     .zm-bubble.bottom-right {
       right: 20px;
     }

@@ -4,9 +4,9 @@
   "private": true,
   "scripts": {
     "dev": "turbo dev",
-    "start": "pnpm --filter @chattr/server start",
-    "onboard": "pnpm --filter @chattr/server run onboard",
-    "seed-demo": "pnpm --filter @chattr/server run seed-demo",
+    "start": "pnpm --filter @talkly/server start",
+    "onboard": "pnpm --filter @talkly/server run onboard",
+    "seed-demo": "pnpm --filter @talkly/server run seed-demo",
     "build": "turbo build",
     "lint": "turbo lint",
     "typecheck": "turbo typecheck",

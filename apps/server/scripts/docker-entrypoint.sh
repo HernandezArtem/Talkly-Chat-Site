@@ -8,10 +8,10 @@ DATA_DIR="${DATA_DIR:-/app/data}"
 SEED_MARKER="$DATA_DIR/.seeded"
 
 should_seed() {
-  [ "${CHATTR_AUTOSEED:-1}" = "1" ] || return 1
+  [ "${TALKLY_AUTOSEED:-1}" = "1" ] || return 1
   [ -f "$SEED_MARKER" ] && return 1
   # Embeddings need either OpenAI (covers OpenAI/Anthropic) or a local/Azure setup.
-  [ -n "$OPENAI_API_KEY" ] || [ "$CHATTR_PROVIDER" = "ollama" ] || [ "$CHATTR_PROVIDER" = "azure-openai" ] || return 1
+  [ -n "$OPENAI_API_KEY" ] || [ "$TALKLY_PROVIDER" = "ollama" ] || [ "$TALKLY_PROVIDER" = "azure-openai" ] || return 1
   return 0
 }
 

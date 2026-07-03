@@ -8,7 +8,7 @@ function hasServerFiles(candidate: string) {
 
 function detectServerRoot() {
   const candidates = [
-    process.env.CHATTR_SERVER_ROOT,
+    process.env.TALKLY_SERVER_ROOT,
     process.cwd(),
     resolve(process.cwd(), "apps", "server"),
     resolve(__dirname, ".."),

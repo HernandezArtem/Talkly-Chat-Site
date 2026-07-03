@@ -6,7 +6,7 @@ import type {
   SourceCard,
   TenantBootstrap,
   TenantEscalation,
-} from "@chattr/shared";
+} from "@talkly/shared";
 
 export interface ThemeConfig {
   primaryColor?: string;

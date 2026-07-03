@@ -2,7 +2,7 @@ import {
   normalizeQuestion,
   matchesLanguage,
   type ChatLanguage,
-} from "@chattr/shared";
+} from "@talkly/shared";
 import type { DetectedChatIntent } from "./intents";
 import { getIntentSuggestions } from "./intents";
 import type { RetrievedSource } from "./rag/retrieve";

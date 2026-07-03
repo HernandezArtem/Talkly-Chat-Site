@@ -1,4 +1,4 @@
-import type { ChatConfidence, ChatLanguage, HandoffAction, SourceCard } from "@chattr/shared";
+import type { ChatConfidence, ChatLanguage, HandoffAction, SourceCard } from "@talkly/shared";
 import { renderMarkdown } from "./markdown";
 import { FeedbackRenderer } from "./renderers/feedback-renderer";
 import { SourcesRenderer } from "./renderers/sources-renderer";

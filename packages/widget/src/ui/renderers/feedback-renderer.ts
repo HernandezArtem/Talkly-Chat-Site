@@ -1,4 +1,4 @@
-import type { SourceCard } from "@chattr/shared";
+import type { SourceCard } from "@talkly/shared";
 import type { WidgetCopy, WidgetFeedbackPayload } from "../../types";
 
 export interface FeedbackRendererOpts {

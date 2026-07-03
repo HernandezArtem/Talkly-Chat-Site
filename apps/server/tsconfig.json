@@ -4,7 +4,7 @@
     "outDir": "dist",
     "lib": ["ES2022"],
     "paths": {
-      "@chattr/shared": ["packages/shared/src/index.ts"],
+      "@talkly/shared": ["packages/shared/src/index.ts"],
       "@/*": ["apps/server/src/*"]
     }
   },

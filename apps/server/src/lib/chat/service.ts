@@ -1,6 +1,6 @@
 import { createDataStreamResponse, formatDataStreamPart, streamText } from "ai";
 import type { Context } from "hono";
-import { buildHandoffActions, chatRequestSchema, detectChatLanguage, type ChatLanguage } from "@chattr/shared";
+import { buildHandoffActions, chatRequestSchema, detectChatLanguage, type ChatLanguage } from "@talkly/shared";
 import { buildLowConfidenceMessage, buildFollowUpSuggestions } from "../chat-experience";
 import { getClientIp } from "../client-ip";
 import { getEnv } from "../env";
@@ -124,8 +124,8 @@ export async function handleChatRequest(c: Context) {
     escalation: tenant.escalation,
   });
 
-  const provider = getEnv("CHATTR_PROVIDER") || "openai";
-  const modelId = getEnv("CHATTR_MODEL") || "gpt-4o";
+  const provider = getEnv("TALKLY_PROVIDER") || "openai";
+  const modelId = getEnv("TALKLY_MODEL") || "gpt-4o";
 
   const result = streamText({
     model: getModel(),

@@ -11,7 +11,7 @@ export class ChatBubble {
     private onToggle: () => void
   ) {
     this.el = document.createElement("button");
-    this.el.className = `chattr-bubble ${position}`;
+    this.el.className = `talkly-bubble ${position}`;
     setIcon(this.el, createChatIcon);
     this.el.setAttribute("aria-label", copy.bubbleAriaLabel);
     this.el.addEventListener("click", () => {

@@ -1,5 +1,5 @@
-import { detectChatLanguage, tenantBootstrapSchema, type ChatLanguage } from "@chattr/shared";
-import type { TenantBootstrap } from "@chattr/shared";
+import { detectChatLanguage, tenantBootstrapSchema, type ChatLanguage } from "@talkly/shared";
+import type { TenantBootstrap } from "@talkly/shared";
 import type { EscalationConfig, ThemeConfig, WidgetConfig, WidgetScriptConfig } from "./types";
 import { Widget } from "./widget";
 
@@ -11,8 +11,6 @@ export interface TalklyPublicApi {
 declare global {
   interface Window {
     Talkly?: TalklyPublicApi;
-    /** @deprecated Use Talkly */
-    Chattr?: TalklyPublicApi;
   }
 }
 
@@ -36,8 +34,6 @@ function createPublicApi(): TalklyPublicApi {
 }
 
 window.Talkly = createPublicApi();
-// Backward compatibility after rebrand from Chattr
-window.Chattr = window.Talkly;
 
 function findScript(): HTMLScriptElement | null {
   if (currentScript?.dataset.server) return currentScript;
@@ -113,8 +109,8 @@ async function resolveWidgetConfig(scriptConfig: WidgetScriptConfig): Promise<Wi
     starterQuestions: scriptConfig.starterQuestions ?? tenantBootstrap?.widget.starterQuestions,
     escalation: mergeEscalation(tenantBootstrap?.widget.escalation, scriptConfig.escalation),
     sessionKey: scriptConfig.sessionKey
-      ?? (scriptConfig.tenantId ? `chattr:${scriptConfig.tenantId}` : undefined)
-      ?? (tenantBootstrap ? `chattr:${tenantBootstrap.tenantId}` : undefined),
+      ?? (scriptConfig.tenantId ? `talkly:${scriptConfig.tenantId}` : undefined)
+      ?? (tenantBootstrap ? `talkly:${tenantBootstrap.tenantId}` : undefined),
     preferredLanguage: scriptConfig.preferredLanguage,
     showLanguageSwitcher: scriptConfig.showLanguageSwitcher,
     tenantBootstrap,
@@ -125,7 +121,7 @@ async function fetchTenantBootstrap(serverUrl: string, tenantId?: string): Promi
   try {
     const headers: HeadersInit = {};
     if (tenantId) {
-      headers["X-Chattr-Tenant"] = tenantId;
+      headers["X-Talkly-Tenant"] = tenantId;
     }
 
     const response = await fetch(`${serverUrl}/api/bootstrap`, {

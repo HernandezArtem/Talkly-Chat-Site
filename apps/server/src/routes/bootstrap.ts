@@ -1,4 +1,4 @@
-import { tenantBootstrapSchema } from "@chattr/shared";
+import { tenantBootstrapSchema } from "@talkly/shared";
 import { Hono } from "hono";
 import { buildTenantBootstrap } from "../lib/tenant";
 

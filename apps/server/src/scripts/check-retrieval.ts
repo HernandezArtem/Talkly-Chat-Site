@@ -104,7 +104,7 @@ function getArg(args: string[], name: string): string | undefined {
 }
 
 function assertEmbeddingConfig() {
-  const provider = getEnv("CHATTR_PROVIDER") || "openai";
+  const provider = getEnv("TALKLY_PROVIDER") || "openai";
 
   if (provider === "azure-openai" && !process.env.AZURE_OPENAI_API_KEY) {
     throw new Error(

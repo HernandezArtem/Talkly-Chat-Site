@@ -1,5 +1,5 @@
 import type { GuardrailsConfig } from "./types";
-import type { ChatLanguage, TenantEscalation } from "@chattr/shared";
+import type { ChatLanguage, TenantEscalation } from "@talkly/shared";
 
 /**
  * Builds a structured, layered system prompt with clear priority hierarchy.
@@ -7,7 +7,7 @@ import type { ChatLanguage, TenantEscalation } from "@chattr/shared";
  * Layers (highest -> lowest priority):
  *   1. Core identity -- immutable, hardcoded
  *   2. Guardrail rules -- topic restrictions, forbidden actions, redirects
- *   3. Operator policy -- the user-defined CHATTR_SYSTEM_PROMPT or tenant systemPrompt
+ *   3. Operator policy -- the user-defined TALKLY_SYSTEM_PROMPT or tenant systemPrompt
  *   4. Page context -- widget data-context (sandboxed)
  *   5. RAG context -- retrieved knowledge base chunks
  */

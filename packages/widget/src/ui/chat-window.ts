@@ -1,6 +1,6 @@
 import { createCloseIcon, createBotIcon, createSendIcon, setIcon } from "./icons";
 import { MessageComponent, MessageData, TypingIndicator } from "./message";
-import type { ChatLanguage } from "@chattr/shared";
+import type { ChatLanguage } from "@talkly/shared";
 import type { WidgetCopy } from "../types";
 import { getWidgetCopy } from "../copy";
 

@@ -8,7 +8,7 @@ export class WidgetContainer {
 
   constructor(theme?: ThemeConfig) {
     this.host = document.createElement("div");
-    this.host.id = "chattr-root";
+    this.host.id = "talkly-root";
     this.shadow = this.host.attachShadow({ mode: "open" });
 
     const style = document.createElement("style");

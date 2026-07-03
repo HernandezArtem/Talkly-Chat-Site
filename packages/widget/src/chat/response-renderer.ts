@@ -1,5 +1,5 @@
-import type { ChatConfidence, ChatJsonResponse, ChatLanguage, HandoffAction, SourceCard } from "@chattr/shared";
-import { matchesLanguage } from "@chattr/shared";
+import type { ChatConfidence, ChatJsonResponse, ChatLanguage, HandoffAction, SourceCard } from "@talkly/shared";
+import { matchesLanguage } from "@talkly/shared";
 import { getAssistantMessageCopy, getWidgetCopy } from "../copy";
 import type { WidgetFeedbackPayload, WidgetHistoryMessage } from "../types";
 import type { ChatWindow } from "../ui/chat-window";

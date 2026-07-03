@@ -7,7 +7,7 @@ const src = join(scriptDir, "../../../packages/widget/dist/index.global.js");
 const dest = join(scriptDir, "../public/widget.js");
 
 if (!existsSync(src)) {
-  console.warn("[talkly] Widget bundle not found. Run: pnpm --filter @chattr/widget build");
+  console.warn("[talkly] Widget bundle not found. Run: pnpm --filter @talkly/widget build");
   process.exit(0);
 }
 

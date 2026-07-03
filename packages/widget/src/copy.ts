@@ -1,5 +1,5 @@
-import type { ChatLanguage } from "@chattr/shared";
-import { matchesLanguage } from "@chattr/shared";
+import type { ChatLanguage } from "@talkly/shared";
+import { matchesLanguage } from "@talkly/shared";
 import type { WidgetConfig, WidgetCopy } from "./types";
 
 const COPY: Record<ChatLanguage, WidgetCopy> = {

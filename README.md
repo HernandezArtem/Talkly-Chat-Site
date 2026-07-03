@@ -135,7 +135,7 @@ pnpm dev              # разработка
 pnpm test             # тесты
 pnpm typecheck        # проверка типов
 pnpm seed-demo        # демо FAQ в базу знаний
-pnpm --filter @chattr/server scrape-ingest --tenant default   # скрапинг сайта
+pnpm --filter @talkly/server scrape-ingest --tenant default   # скрапинг сайта
 ```
 
 ---

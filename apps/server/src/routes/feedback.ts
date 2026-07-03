@@ -1,5 +1,5 @@
 import { Hono } from "hono";
-import { feedbackPayloadSchema } from "@chattr/shared";
+import { feedbackPayloadSchema } from "@talkly/shared";
 import { appendJsonlLog, createLoggedTextField, logRuntimeEvent } from "../lib/logging";
 
 export const feedbackRoute = new Hono();

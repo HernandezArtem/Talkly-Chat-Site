@@ -1,4 +1,4 @@
-import type { ChatLanguage } from "@chattr/shared";
+import type { ChatLanguage } from "@talkly/shared";
 import type { GuardrailsConfig, GuardrailResult } from "./types";
 
 // ── Rate Limiting ──

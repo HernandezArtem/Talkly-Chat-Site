@@ -22,15 +22,15 @@ WORKDIR /app
 COPY --from=base /app/apps/server/dist ./dist
 COPY --from=base /app/apps/server/public ./public
 COPY --from=base /app/apps/server/data/seed ./data/seed
-COPY --from=base /app/apps/server/scripts/docker-entrypoint.sh /usr/local/bin/chattr-entrypoint
+COPY --from=base /app/apps/server/scripts/docker-entrypoint.sh /usr/local/bin/talkly-entrypoint
 COPY --from=base /app/apps/server/node_modules ./node_modules
 COPY --from=base /app/node_modules/.pnpm ./node_modules/.pnpm
 
-RUN chmod +x /usr/local/bin/chattr-entrypoint
+RUN chmod +x /usr/local/bin/talkly-entrypoint
 
 ENV NODE_ENV=production
 ENV PORT=3000
 
 EXPOSE 3000
 
-ENTRYPOINT ["/usr/local/bin/chattr-entrypoint"]
+ENTRYPOINT ["/usr/local/bin/talkly-entrypoint"]

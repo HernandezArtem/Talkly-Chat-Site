@@ -7,10 +7,10 @@
 import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { createInterface } from "node:readline/promises";
 import { stdin as input, stdout as output } from "node:process";
-import defaultInstanceConfig from "../instance/default/chattr.config";
+import defaultInstanceConfig from "../instance/default/talkly.config";
 import {
   instanceConfigSchema,
-  type ChattrInstanceConfig,
+  type TalklyInstanceConfig,
   type InstanceTenantConfig,
 } from "../instance/config";
 import { resolveServerPath } from "../lib/paths";
@@ -31,7 +31,7 @@ const PROVIDERS: ProviderChoice[] = [
 ];
 
 const ENV_PATH = resolveServerPath(".env");
-const INSTANCE_CONFIG_PATH = resolveServerPath("src", "instance", "default", "chattr.config.ts");
+const INSTANCE_CONFIG_PATH = resolveServerPath("src", "instance", "default", "talkly.config.ts");
 
 async function main() {
   const rl = createInterface({ input, output });
@@ -52,14 +52,14 @@ async function main() {
   console.log("Which model provider?");
   PROVIDERS.forEach((p, i) => console.log(`  ${i + 1}. ${p.label}${p.hint ? ` — ${p.hint}` : ""}`));
 
-  const currentProvider = existingEnv.CHATTR_PROVIDER || "openai";
+  const currentProvider = existingEnv.TALKLY_PROVIDER || "openai";
   const currentIndex = PROVIDERS.findIndex((p) => p.id === currentProvider);
   const choiceRaw = await ask("Choose 1-4", String(currentIndex >= 0 ? currentIndex + 1 : 1));
   const choiceIdx = Math.max(1, Math.min(PROVIDERS.length, Number(choiceRaw))) - 1;
   const provider = PROVIDERS[choiceIdx];
 
   const env: Record<string, string> = { ...existingEnv };
-  env.CHATTR_PROVIDER = provider.id;
+  env.TALKLY_PROVIDER = provider.id;
 
   // ── API key ──
   if (provider.envKey) {
@@ -71,8 +71,8 @@ async function main() {
   }
 
   // ── Model ──
-  const model = await ask("Chat model", env.CHATTR_MODEL || provider.defaultModel);
-  env.CHATTR_MODEL = model;
+  const model = await ask("Chat model", env.TALKLY_MODEL || provider.defaultModel);
+  env.TALKLY_MODEL = model;
 
   // ── Provider-specific extras ──
   if (provider.id === "azure-openai") {
@@ -97,8 +97,8 @@ async function main() {
   }
 
   // ── Admin key ──
-  const adminKey = await ask("CHATTR_ADMIN_KEY (bearer token for /api/ingest)", env.CHATTR_ADMIN_KEY || generateAdminKey());
-  env.CHATTR_ADMIN_KEY = adminKey;
+  const adminKey = await ask("TALKLY_ADMIN_KEY (bearer token for /api/ingest)", env.TALKLY_ADMIN_KEY || generateAdminKey());
+  env.TALKLY_ADMIN_KEY = adminKey;
 
   // ── Tenant ──
   console.log("\nDefault tenant — what your visitors see in the widget:");
@@ -143,7 +143,7 @@ async function main() {
     ...(existingDefault?.guardrails ? { guardrails: existingDefault.guardrails } : {}),
   };
 
-  const nextInstanceConfig: ChattrInstanceConfig = {
+  const nextInstanceConfig: TalklyInstanceConfig = {
     ...existingInstance,
     defaultTenantId: existingDefaultTenantId,
     tenants: {
@@ -173,21 +173,21 @@ async function main() {
   if (contentChoice.startsWith("s")) {
     console.log("\nRunning scrape-ingest...");
     const { spawnSync } = await import("node:child_process");
-    const result = spawnSync("pnpm", ["--filter", "@chattr/server", "run", "scrape-ingest", "--", "--tenant", "default"], {
+    const result = spawnSync("pnpm", ["--filter", "@talkly/server", "run", "scrape-ingest", "--", "--tenant", "default"], {
       stdio: "inherit",
       cwd: repoRoot,
     });
     if (result.status !== 0) {
-      console.error("\nScrape failed. You can retry with: pnpm --filter @chattr/server run scrape-ingest -- --tenant default");
+      console.error("\nScrape failed. You can retry with: pnpm --filter @talkly/server run scrape-ingest -- --tenant default");
       console.error("Or seed bundled demo content instead: pnpm seed-demo");
       process.exit(result.status ?? 1);
     }
   } else if (contentChoice.startsWith("n")) {
-    console.log("\nSkipping content ingest. Run `pnpm seed-demo` later for bundled demo content, or `pnpm --filter @chattr/server run scrape-ingest -- --tenant default` to scrape your site.");
+    console.log("\nSkipping content ingest. Run `pnpm seed-demo` later for bundled demo content, or `pnpm --filter @talkly/server run scrape-ingest -- --tenant default` to scrape your site.");
   } else {
     console.log("\nSeeding demo content...");
     const { spawnSync } = await import("node:child_process");
-    const result = spawnSync("pnpm", ["--filter", "@chattr/server", "run", "seed-demo"], {
+    const result = spawnSync("pnpm", ["--filter", "@talkly/server", "run", "seed-demo"], {
       stdio: "inherit",
       cwd: repoRoot,
     });
@@ -239,7 +239,7 @@ function maskKey(value: string): string {
   return `${value.slice(0, 4)}…${value.slice(-4)}`;
 }
 
-function getDefaultTenantId(config: ChattrInstanceConfig): string {
+function getDefaultTenantId(config: TalklyInstanceConfig): string {
   if (config.defaultTenantId && config.tenants[config.defaultTenantId]) {
     return config.defaultTenantId;
   }
@@ -256,7 +256,7 @@ function getDefaultTenantId(config: ChattrInstanceConfig): string {
   return firstTenantId;
 }
 
-function renderInstanceConfig(config: ChattrInstanceConfig): string {
+function renderInstanceConfig(config: TalklyInstanceConfig): string {
   return [
     "import { defineInstanceConfig } from \"../config\";",
     "",

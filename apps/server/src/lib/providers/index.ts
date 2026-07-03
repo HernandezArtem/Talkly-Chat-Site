@@ -26,7 +26,7 @@ export function listProviders(): string[] {
 }
 
 export function getProvider(id?: string): ProviderDefinition {
-  const providerId = id || getEnv("CHATTR_PROVIDER") || "openai";
+  const providerId = id || getEnv("TALKLY_PROVIDER") || "openai";
   const provider = registry[providerId];
   if (!provider) {
     throw new Error(
@@ -38,7 +38,7 @@ export function getProvider(id?: string): ProviderDefinition {
 
 export function getModel(): LanguageModelV1 {
   const provider = getProvider();
-  const modelId = getEnv("CHATTR_MODEL") || provider.defaultChatModel;
+  const modelId = getEnv("TALKLY_MODEL") || provider.defaultChatModel;
   return provider.chat(modelId);
 }
 

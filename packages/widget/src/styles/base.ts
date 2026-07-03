@@ -17,7 +17,7 @@ export const baseStyles = `
     padding: 0;
   }
 
-  .chattr-bubble,
+  .talkly-bubble,
   .zm-bubble {
     position: fixed;
     bottom: 24px;
@@ -36,18 +36,18 @@ export const baseStyles = `
     z-index: 2147483647;
   }
 
-  .chattr-bubble:hover,
+  .talkly-bubble:hover,
   .zm-bubble:hover {
     transform: scale(1.08);
     box-shadow: var(--zm-shadow-sm), 0 0 0 6px rgba(124, 58, 237, 0.2);
   }
 
-  .chattr-bubble.bottom-right,
+  .talkly-bubble.bottom-right,
   .zm-bubble.bottom-right {
     right: 24px;
   }
 
-  .chattr-bubble.bottom-left,
+  .talkly-bubble.bottom-left,
   .zm-bubble.bottom-left {
     left: 24px;
   }

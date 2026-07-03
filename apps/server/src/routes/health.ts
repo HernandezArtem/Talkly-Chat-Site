@@ -12,7 +12,7 @@ healthRoute.get("/", (c) => {
   if (process.env.AZURE_OPENAI_API_KEY) providers.push("azure-openai");
 
   // Tenant is optional for health checks (load balancer probes won't send it)
-  const requestedTenantId = c.req.header("X-Chattr-Tenant");
+  const requestedTenantId = c.req.header("X-Talkly-Tenant");
   const defaultTenant = getDefaultTenant();
   const tenantId = requestedTenantId || defaultTenant?.[0] || null;
   const tenant = tenantId ? getTenantConfig(tenantId) : null;

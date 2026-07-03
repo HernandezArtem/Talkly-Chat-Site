@@ -31,15 +31,15 @@ function parseBooleanEnv(value: string | undefined, defaultValue: boolean) {
 }
 
 function getRuntimeLogsEnabled() {
-  return parseBooleanEnv(getEnv("CHATTR_RUNTIME_LOGS"), process.env.NODE_ENV === "production");
+  return parseBooleanEnv(getEnv("TALKLY_RUNTIME_LOGS"), process.env.NODE_ENV === "production");
 }
 
 function getLogContentEnabled() {
-  return parseBooleanEnv(getEnv("CHATTR_LOG_CONTENT"), false);
+  return parseBooleanEnv(getEnv("TALKLY_LOG_CONTENT"), false);
 }
 
 function getLogMaxChars() {
-  const parsed = Number(getEnv("CHATTR_LOG_MAX_CHARS"));
+  const parsed = Number(getEnv("TALKLY_LOG_MAX_CHARS"));
   return Number.isFinite(parsed) && parsed > 0 ? parsed : 4000;
 }
 
@@ -71,7 +71,7 @@ export function logRuntimeEvent(
 
   const entry = {
     timestamp: new Date().toISOString(),
-    service: "chattr-server",
+    service: "talkly-server",
     environment: process.env.NODE_ENV || "development",
     level,
     event,

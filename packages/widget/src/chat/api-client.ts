@@ -3,7 +3,7 @@ import {
   feedbackPayloadSchema,
   type ChatJsonResponse,
   type FeedbackPayload,
-} from "@chattr/shared";
+} from "@talkly/shared";
 
 export type ChatApiResult =
   | { kind: "json"; data: ChatJsonResponse }
@@ -64,7 +64,7 @@ export class ChatApiClient {
   private buildHeaders(): Record<string, string> {
     const headers: Record<string, string> = {};
     if (this.tenantId) {
-      headers["X-Chattr-Tenant"] = this.tenantId;
+      headers["X-Talkly-Tenant"] = this.tenantId;
     }
     return headers;
   }

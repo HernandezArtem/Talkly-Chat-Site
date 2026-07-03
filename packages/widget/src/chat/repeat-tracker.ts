@@ -1,4 +1,4 @@
-import { normalizeQuestion } from "@chattr/shared";
+import { normalizeQuestion } from "@talkly/shared";
 
 export class RepeatedQuestionTracker {
   private recentUserMessages: string[] = [];

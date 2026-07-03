@@ -4,7 +4,7 @@ import { resolve } from "node:path";
 export default defineConfig({
   resolve: {
     alias: {
-      "@chattr/shared": resolve(__dirname, "packages/shared/src/index.ts"),
+      "@talkly/shared": resolve(__dirname, "packages/shared/src/index.ts"),
     },
   },
   test: {

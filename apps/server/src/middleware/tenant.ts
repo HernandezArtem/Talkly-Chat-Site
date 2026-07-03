@@ -10,7 +10,7 @@ declare module "hono" {
 }
 
 export const tenantMiddleware = createMiddleware(async (c, next) => {
-  const requestedTenantId = c.req.header("X-Chattr-Tenant");
+  const requestedTenantId = c.req.header("X-Talkly-Tenant");
 
   let tenantId = requestedTenantId;
   let tenant = tenantId ? getTenantConfig(tenantId) : null;

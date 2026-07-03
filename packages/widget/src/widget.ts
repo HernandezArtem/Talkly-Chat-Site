@@ -1,4 +1,4 @@
-import { buildHandoffActions, matchesLanguage, type ChatLanguage, type HandoffAction } from "@chattr/shared";
+import { buildHandoffActions, matchesLanguage, type ChatLanguage, type HandoffAction } from "@talkly/shared";
 
 import { resolveTheme } from "./theme/engine";
 
@@ -220,7 +220,7 @@ export class Widget {
 
   private emitLanguageChange(language: ChatLanguage) {
 
-    window.dispatchEvent(new CustomEvent("chattr:languagechange", { detail: { language } }));
+    window.dispatchEvent(new CustomEvent("talkly:languagechange", { detail: { language } }));
 
   }
 

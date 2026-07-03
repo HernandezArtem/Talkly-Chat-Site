@@ -27,7 +27,7 @@ function initSchema(database: Database.Database, dimensions: number) {
 }
 
 export function getDb(dbPath?: string): Database.Database {
-  const effectivePath = dbPath || getEnv("CHATTR_DB_PATH") || "./data/chattr.db";
+  const effectivePath = dbPath || getEnv("TALKLY_DB_PATH") || "./data/talkly.db";
   const resolved = resolveFromServerRoot(effectivePath);
   const dimensions = getEmbeddingDimensions();
   // Key the pool by (path, dimensions) so swapping providers does not
@@ -58,7 +58,7 @@ export function insertDocument(
     throw new Error(
       `[Talkly] Invalid embedding size: expected ${expected}, got ${embedding.length}. ` +
         `If you switched providers, the existing database was built for a different embedding model. ` +
-        `Either re-ingest from scratch (clear ./data) or restore the previous CHATTR_PROVIDER.`
+        `Either re-ingest from scratch (clear ./data) or restore the previous TALKLY_PROVIDER.`
     );
   }
 

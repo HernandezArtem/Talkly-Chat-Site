@@ -1,4 +1,4 @@
-import type { ChatLanguage, HandoffAction } from "@chattr/shared";
+import type { ChatLanguage, HandoffAction } from "@talkly/shared";
 import { getAssistantMessageCopy, getWidgetCopy } from "../copy";
 import type { WidgetHistoryMessage, WidgetFeedbackPayload } from "../types";
 import type { ChatWindow } from "../ui/chat-window";
