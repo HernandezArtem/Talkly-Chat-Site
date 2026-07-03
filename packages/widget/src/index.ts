@@ -1,9 +1,43 @@
-import { detectChatLanguage, tenantBootstrapSchema } from "@chattr/shared";
+import { detectChatLanguage, tenantBootstrapSchema, type ChatLanguage } from "@chattr/shared";
 import type { TenantBootstrap } from "@chattr/shared";
 import type { EscalationConfig, ThemeConfig, WidgetConfig, WidgetScriptConfig } from "./types";
 import { Widget } from "./widget";
 
+export interface TalklyPublicApi {
+  setLanguage(language: ChatLanguage): void;
+  getLanguage(): ChatLanguage;
+}
+
+declare global {
+  interface Window {
+    Talkly?: TalklyPublicApi;
+    /** @deprecated Use Talkly */
+    Chattr?: TalklyPublicApi;
+  }
+}
+
 const currentScript = document.currentScript as HTMLScriptElement | null;
+let widgetInstance: Widget | null = null;
+const pendingLanguages: ChatLanguage[] = [];
+
+function createPublicApi(): TalklyPublicApi {
+  return {
+    setLanguage(language) {
+      if (widgetInstance) {
+        widgetInstance.setLanguage(language);
+        return;
+      }
+      pendingLanguages.push(language);
+    },
+    getLanguage() {
+      return widgetInstance?.getLanguage() ?? pendingLanguages.at(-1) ?? "en";
+    },
+  };
+}
+
+window.Talkly = createPublicApi();
+// Backward compatibility after rebrand from Chattr
+window.Chattr = window.Talkly;
 
 function findScript(): HTMLScriptElement | null {
   if (currentScript?.dataset.server) return currentScript;
@@ -15,12 +49,17 @@ function findScript(): HTMLScriptElement | null {
 async function boot() {
   const script = findScript();
   if (!script) {
-    console.error("[Chattr] Could not find script element with data-server attribute");
+    console.error("[Talkly] Could not find script element with data-server attribute");
     return;
   }
   const scriptConfig = parseScriptConfig(script);
   const resolvedConfig = await resolveWidgetConfig(scriptConfig);
-  new Widget(resolvedConfig);
+  widgetInstance = new Widget(resolvedConfig);
+
+  for (const language of pendingLanguages) {
+    widgetInstance.setLanguage(language);
+  }
+  pendingLanguages.length = 0;
 }
 
 if (document.readyState === "loading") {
@@ -32,7 +71,7 @@ if (document.readyState === "loading") {
 function parseScriptConfig(script: HTMLScriptElement): WidgetScriptConfig {
   const serverUrl = script.dataset.server;
   if (!serverUrl) {
-    throw new Error("[Chattr] data-server attribute is required");
+    throw new Error("[Talkly] data-server attribute is required");
   }
   const tenantId = script.dataset.tenant;
 
@@ -56,6 +95,7 @@ function parseScriptConfig(script: HTMLScriptElement): WidgetScriptConfig {
     escalation: parseEscalation(script),
     sessionKey: script.dataset.sessionKey,
     preferredLanguage: parsePreferredLanguage(script.dataset.language, script.dataset.welcomeMessage),
+    showLanguageSwitcher: parseBoolean(script.dataset.showLanguageSwitcher, true),
   };
 }
 
@@ -76,6 +116,7 @@ async function resolveWidgetConfig(scriptConfig: WidgetScriptConfig): Promise<Wi
       ?? (scriptConfig.tenantId ? `chattr:${scriptConfig.tenantId}` : undefined)
       ?? (tenantBootstrap ? `chattr:${tenantBootstrap.tenantId}` : undefined),
     preferredLanguage: scriptConfig.preferredLanguage,
+    showLanguageSwitcher: scriptConfig.showLanguageSwitcher,
     tenantBootstrap,
   };
 }
@@ -149,8 +190,13 @@ function parseNumber(value?: string): number | undefined {
   return Number.isFinite(parsed) ? parsed : undefined;
 }
 
+function parseBoolean(value: string | undefined, defaultValue: boolean): boolean {
+  if (value === undefined) return defaultValue;
+  return value !== "false" && value !== "0";
+}
+
 function parsePreferredLanguage(languageValue?: string, welcomeMessage?: string) {
-  if (languageValue === "nl" || languageValue === "en") return languageValue;
+  if (languageValue === "ru" || languageValue === "en") return languageValue;
   if (welcomeMessage) return detectChatLanguage(welcomeMessage);
   return "en" as const;
 }

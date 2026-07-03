@@ -30,7 +30,7 @@ export function getProvider(id?: string): ProviderDefinition {
   const provider = registry[providerId];
   if (!provider) {
     throw new Error(
-      `[Chattr] Unknown provider: ${providerId}. Available: ${listProviders().join(", ")}`
+      `[Talkly] Unknown provider: ${providerId}. Available: ${listProviders().join(", ")}`
     );
   }
   return provider;

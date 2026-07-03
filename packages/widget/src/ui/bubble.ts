@@ -59,6 +59,21 @@ export class ChatBubble {
     }
   }
 
+  updateCopy(copy: WidgetCopy) {
+    this.copy = copy;
+    this.el.setAttribute("aria-label", copy.bubbleAriaLabel);
+    if (this.nudgeEl) {
+      const closeBtn = this.nudgeEl.querySelector(".zm-nudge-close");
+      if (closeBtn) closeBtn.setAttribute("aria-label", copy.closeNudgeAriaLabel);
+    }
+  }
+
+  updateNudgeMessage(message: string) {
+    if (!this.nudgeEl) return;
+    const text = this.nudgeEl.querySelector("p");
+    if (text) text.textContent = message;
+  }
+
   mount(parent: ShadowRoot) {
     parent.appendChild(this.el);
   }

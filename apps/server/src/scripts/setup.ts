@@ -38,7 +38,7 @@ async function main() {
   const ask = (prompt: string, fallback?: string) =>
     rl.question(fallback ? `${prompt} [${fallback}]: ` : `${prompt}: `).then((v) => v.trim() || fallback || "");
 
-  console.log("\nChattr setup");
+  console.log("\nTalkly setup");
   console.log("------------");
   console.log("This walks through provider, branding, and your first scrape source.");
   console.log("Press Enter to accept the value in [brackets]. Re-run any time.\n");
@@ -91,7 +91,7 @@ async function main() {
   }
 
   if (provider.id === "anthropic" && !env.OPENAI_API_KEY) {
-    console.log("\nNote: Anthropic doesn't ship embeddings yet, so Chattr falls back to OpenAI for RAG embeddings.");
+    console.log("\nNote: Anthropic doesn't ship embeddings yet, so Talkly falls back to OpenAI for RAG embeddings.");
     const openaiKey = await ask("OPENAI_API_KEY (for embeddings)", "");
     if (openaiKey) env.OPENAI_API_KEY = openaiKey;
   }
@@ -127,7 +127,7 @@ async function main() {
         primaryColor,
         title: widgetTitle,
         subtitle: widgetSubtitle,
-        avatarUrl: existingDefault?.widget?.theme?.avatarUrl || "/Chattr.png",
+        avatarUrl: existingDefault?.widget?.theme?.avatarUrl || "/avatar.svg",
       },
       bubbleMessage: existingDefault?.widget?.bubbleMessage || "Ask a question",
       bubbleDelay: existingDefault?.widget?.bubbleDelay,

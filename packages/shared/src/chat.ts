@@ -28,6 +28,7 @@ export type ChatMessage = z.infer<typeof chatMessageSchema>;
 export const chatRequestSchema = z.object({
   messages: z.array(chatMessageSchema),
   context: z.string().optional(),
+  language: chatLanguageSchema.optional(),
 });
 export type ChatRequest = z.infer<typeof chatRequestSchema>;
 
@@ -46,6 +47,7 @@ export const chatJsonResponseSchema = z.object({
   confidence: chatConfidenceSchema.optional(),
   reason: z.string().optional(),
   message: z.string().min(1),
+  language: chatLanguageSchema.optional(),
   suggestions: z.array(z.string().min(1)).optional(),
   handoffActions: z.array(handoffActionSchema).optional(),
 });
@@ -82,9 +84,9 @@ export function buildHandoffActions(
         share: "Share conversation",
       }
     : {
-        call: "Bel ons",
-        contact: "Open contactpagina",
-        share: "Stuur gesprek mee",
+        call: "Позвонить",
+        contact: "Открыть страницу контактов",
+        share: "Поделиться перепиской",
       };
 
   const actions: HandoffAction[] = [];

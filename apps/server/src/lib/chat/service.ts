@@ -1,6 +1,6 @@
 import { createDataStreamResponse, formatDataStreamPart, streamText } from "ai";
 import type { Context } from "hono";
-import { buildHandoffActions, chatRequestSchema, detectChatLanguage } from "@chattr/shared";
+import { buildHandoffActions, chatRequestSchema, detectChatLanguage, type ChatLanguage } from "@chattr/shared";
 import { buildLowConfidenceMessage, buildFollowUpSuggestions } from "../chat-experience";
 import { getClientIp } from "../client-ip";
 import { getEnv } from "../env";
@@ -14,6 +14,16 @@ import { detectChatIntent } from "../intents";
 import { appendJsonlLog, createLoggedTextField, logRuntimeEvent } from "../logging";
 import { getModel } from "../providers";
 import { retrieveContext } from "../rag/retrieve";
+import { getDocumentCount } from "../rag/vectorstore";
+
+function detectRequestLanguage(
+  messages: Array<{ role: "user" | "assistant"; content: string }>,
+  fallback: "en" | "ru" = "en"
+): ChatLanguage {
+  const lastUser = [...messages].reverse().find((message) => message.role === "user");
+  if (!lastUser) return fallback;
+  return detectChatLanguage(lastUser.content, fallback);
+}
 
 export async function handleChatRequest(c: Context) {
   const body = await c.req.json();
@@ -23,7 +33,7 @@ export async function handleChatRequest(c: Context) {
     return c.json({ error: "Invalid request", details: parsed.error.flatten() }, 400);
   }
 
-  const { messages, context } = parsed.data;
+  const { messages, context, language: preferredLanguage } = parsed.data;
   const tenantId = c.get("tenantId");
   const tenant = c.get("tenant");
   const requestId = c.req.header("x-request-id") || crypto.randomUUID();
@@ -37,7 +47,10 @@ export async function handleChatRequest(c: Context) {
     return c.json({ error: "No user message found" }, 400);
   }
 
-  const language = detectChatLanguage(lastUserMessage.content);
+  const hasUserMessages = messages.some((message) => message.role === "user");
+  const language = hasUserMessages
+    ? detectRequestLanguage(messages, preferredLanguage ?? "en")
+    : (preferredLanguage ?? "en");
   const config = loadGuardrailsConfig(tenant.guardrails);
 
   const inputResult = runInputGuardrails({
@@ -69,6 +82,7 @@ export async function handleChatRequest(c: Context) {
       blocked: true,
       reason: inputResult.reason,
       message: inputResult.cannedResponse,
+      language,
     });
   }
 
@@ -84,8 +98,9 @@ export async function handleChatRequest(c: Context) {
     intent,
   });
   const handoffActions = buildHandoffActions(tenant.escalation, language);
+  const knowledgeBaseEmpty = getDocumentCount(tenant.dbPath) === 0;
 
-  if (retrieval.confidence === "low") {
+  if (retrieval.confidence === "low" && !knowledgeBaseEmpty) {
     return buildFallbackResponse(c, {
       requestId,
       tenantId,
@@ -156,7 +171,7 @@ function buildFallbackResponse(
     requestId: string;
     tenantId: string;
     tenant: Context["var"]["tenant"];
-    language: "en" | "nl";
+    language: "en" | "ru";
     intent: ReturnType<typeof detectChatIntent>;
     retrieval: Awaited<ReturnType<typeof retrieveContext>>;
     suggestions: string[];
@@ -199,6 +214,7 @@ function buildFallbackResponse(
     fallback: true,
     confidence: opts.retrieval.confidence,
     message,
+    language: opts.language,
     suggestions: opts.suggestions,
     handoffActions: opts.handoffActions,
   });
@@ -209,7 +225,7 @@ function buildStreamResponse(opts: {
   requestId: string;
   tenantId: string;
   tenant: Context["var"]["tenant"];
-  language: "en" | "nl";
+  language: "en" | "ru";
   intent: ReturnType<typeof detectChatIntent>;
   retrieval: Awaited<ReturnType<typeof retrieveContext>>;
   suggestions: string[];
@@ -252,8 +268,8 @@ function buildStreamResponse(opts: {
 
       if (!outputResult.allowed) {
         const blockedMessage = outputResult.cannedResponse
-          || (opts.language === "nl"
-            ? "Sorry, er ging iets mis. Waarmee kan ik u verder helpen?"
+          || (opts.language === "ru"
+            ? "Извините, что-то пошло не так. Чем ещё могу помочь?"
             : "I'm sorry, something went wrong. How else can I help you?");
 
         dataStream.write(formatDataStreamPart("text", blockedMessage));
@@ -322,7 +338,7 @@ function buildStreamResponse(opts: {
 function logRequest(opts: {
   requestId: string;
   tenantId: string;
-  language: "en" | "nl";
+  language: "en" | "ru";
   messageCount: number;
   contextProvided: boolean;
   question: string;

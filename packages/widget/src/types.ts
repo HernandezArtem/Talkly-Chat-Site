@@ -44,6 +44,10 @@ export interface WidgetCopy {
   feedbackReasons: string[];
   errorMessage: string;
   defaultWelcomeMessage: string;
+  subtitle: string;
+  bubbleMessage: string;
+  langSwitchAriaLabel: string;
+  avatarAlt: string;
 }
 
 export interface WidgetScriptConfig {
@@ -58,6 +62,7 @@ export interface WidgetScriptConfig {
   escalation?: EscalationConfig;
   sessionKey?: string;
   preferredLanguage: ChatLanguage;
+  showLanguageSwitcher?: boolean;
 }
 
 export interface WidgetConfig {
@@ -72,12 +77,14 @@ export interface WidgetConfig {
   escalation?: EscalationConfig;
   sessionKey?: string;
   preferredLanguage: ChatLanguage;
+  showLanguageSwitcher?: boolean;
   tenantBootstrap?: TenantBootstrap | null;
 }
 
 export interface WidgetSessionData {
   messages: WidgetHistoryMessage[];
   welcomed: boolean;
+  language?: ChatLanguage;
 }
 
 export interface WidgetMessageMeta {

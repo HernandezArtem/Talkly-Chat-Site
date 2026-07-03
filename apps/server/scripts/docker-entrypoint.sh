@@ -16,11 +16,11 @@ should_seed() {
 }
 
 if should_seed; then
-  echo "[chattr] First boot: seeding bundled demo content..."
+  echo "[talkly] First boot: seeding bundled demo content..."
   if node dist/scripts/seed-demo.js; then
     touch "$SEED_MARKER"
   else
-    echo "[chattr] Demo seed failed; starting server anyway. Run 'pnpm seed-demo' to retry."
+    echo "[talkly] Demo seed failed; starting server anyway. Run 'pnpm seed-demo' to retry."
   fi
 fi
 

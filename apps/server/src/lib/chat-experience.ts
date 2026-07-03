@@ -1,5 +1,6 @@
 import {
   normalizeQuestion,
+  matchesLanguage,
   type ChatLanguage,
 } from "@chattr/shared";
 import type { DetectedChatIntent } from "./intents";
@@ -26,16 +27,16 @@ export function buildLowConfidenceMessage(
     return message;
   }
 
-  let message = `Ik kon geen betrouwbaar antwoord vinden in onze kennisbank voor ${tenant.name}.`;
+  let message = `Я не смог найти надёжный ответ в нашей базе знаний для ${tenant.name}.`;
   if (tenant.escalation?.phone) {
-    message += ` U kunt ons bellen op ${tenant.escalation.phone}`;
+    message += ` Вы можете позвонить нам: ${tenant.escalation.phone}`;
     if (tenant.escalation.phoneHours) {
       message += ` (${tenant.escalation.phoneHours})`;
     }
     message += ".";
   }
   if (tenant.escalation?.url) {
-    message += ` U kunt ook onze contactpagina gebruiken: ${tenant.escalation.url}.`;
+    message += ` Также можно воспользоваться страницей контактов: ${tenant.escalation.url}.`;
   }
   return message;
 }
@@ -55,46 +56,48 @@ export function buildFollowUpSuggestions(opts: {
     suggestions.add(suggestion);
   }
 
-  if (hasAny(haystack, ["pricing", "price", "plan", "plans", "cost", "quote"])) {
+  if (hasAny(haystack, ["pricing", "price", "plan", "plans", "cost", "quote", "цена", "стоимость", "тариф"])) {
     addLocalized(suggestions, opts.language,
-      "Waar vind ik de prijzen?",
+      "Где найти цены?",
       "Where can I find pricing?"
     );
     addLocalized(suggestions, opts.language,
-      "Zijn er verschillende plannen?",
+      "Есть ли разные тарифы?",
       "Do you offer different plans?"
     );
   }
 
-  if (hasAny(haystack, ["shipping", "delivery", "order", "tracking", "shipment"])) {
+  if (hasAny(haystack, ["shipping", "delivery", "order", "tracking", "shipment", "доставка", "заказ", "отслеживание"])) {
     addLocalized(suggestions, opts.language,
-      "Wat zijn de verzendtijden?",
+      "Какие сроки доставки?",
       "What are your shipping times?"
     );
     addLocalized(suggestions, opts.language,
-      "Hoe volg ik mijn bestelling?",
+      "Как отследить заказ?",
       "How do I track my order?"
     );
   }
 
-  if (hasAny(haystack, ["return", "returns", "refund", "exchange", "cancellation"])) {
+  if (hasAny(haystack, ["return", "returns", "refund", "exchange", "cancellation", "возврат", "обмен", "возмещение"])) {
     addLocalized(suggestions, opts.language,
-      "Wat is jullie retourbeleid?",
+      "Какая у вас политика возврата?",
       "What is your return policy?"
     );
     addLocalized(suggestions, opts.language,
-      "Hoe vraag ik een terugbetaling aan?",
+      "Как оформить возврат средств?",
       "How do I request a refund?"
     );
   }
 
   addLocalized(suggestions, opts.language,
-    `Hoe neem ik contact op met ${opts.tenant.name}?`,
+    `Как связаться с ${opts.tenant.name}?`,
     `How do I contact ${opts.tenant.name}?`
   );
 
   for (const starter of opts.tenant.starterQuestions || []) {
-    suggestions.add(starter);
+    if (matchesLanguage(starter, opts.language)) {
+      suggestions.add(starter);
+    }
   }
 
   return [...suggestions]
@@ -109,10 +112,10 @@ function hasAny(haystack: string, terms: string[]): boolean {
 function addLocalized(
   set: Set<string>,
   language: ChatLanguage,
-  dutch: string,
+  russian: string,
   english: string
 ) {
-  set.add(language === "en" ? english : dutch);
+  set.add(language === "en" ? english : russian);
 }
 
 function normalize(text: string): string {

@@ -19,7 +19,7 @@ export function appendJsonlLog(
 
   const filePath = resolve(dir, fileName);
   appendFile(filePath, `${JSON.stringify(entry)}\n`, "utf8").catch((err) =>
-    console.error(`[Chattr] Log write failed: ${filePath}`, err)
+    console.error(`[Talkly] Log write failed: ${filePath}`, err)
   );
 }
 

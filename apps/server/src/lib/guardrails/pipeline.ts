@@ -36,8 +36,8 @@ export function runInputGuardrails(opts: {
     return {
       allowed: false,
       reason: "Empty message after sanitization",
-      cannedResponse: language === "nl"
-        ? "Het lijkt erop dat uw bericht leeg was. Kunt u het opnieuw proberen?"
+      cannedResponse: language === "ru"
+        ? "Похоже, ваше сообщение было пустым. Попробуйте ещё раз?"
         : "It looks like your message was empty. Could you try again?",
     };
   }
@@ -45,7 +45,7 @@ export function runInputGuardrails(opts: {
   if (config.inputGuardrails.promptInjectionDetection !== false) {
     const injectionResult = detectPromptInjection(sanitizedMessage, language);
     if (!injectionResult.allowed) {
-      console.warn(`[Chattr] Injection blocked: ${injectionResult.reason}`);
+      console.warn(`[Talkly] Injection blocked: ${injectionResult.reason}`);
       return injectionResult;
     }
   }
@@ -75,12 +75,12 @@ export function runOutputGuardrails(opts: {
   if (config.outputGuardrails.systemPromptLeakDetection !== false) {
     const leakResult = detectSystemPromptLeak(generatedText, systemPrompt);
     if (!leakResult.allowed) {
-      console.warn(`[Chattr] Prompt leak blocked: ${leakResult.reason}`);
+      console.warn(`[Talkly] Prompt leak blocked: ${leakResult.reason}`);
       return {
         allowed: false,
         reason: leakResult.reason,
-        cannedResponse: language === "nl"
-          ? "Sorry, ik kan die informatie niet geven. Waarmee kan ik u verder helpen?"
+        cannedResponse: language === "ru"
+          ? "Извините, я не могу предоставить эту информацию. Чем ещё могу помочь?"
           : "I'm sorry, I can't provide that information. How else can I help you?",
       };
     }
@@ -89,7 +89,7 @@ export function runOutputGuardrails(opts: {
   if (config.outputGuardrails.contentFiltering !== false) {
     const filterResult = filterOutput(generatedText, config);
     if (!filterResult.allowed) {
-      console.warn(`[Chattr] Output filtered: ${filterResult.reason}`);
+      console.warn(`[Talkly] Output filtered: ${filterResult.reason}`);
       const redactedText = redactOutput(generatedText, config);
       return { allowed: true, redactedText, reason: filterResult.reason };
     }

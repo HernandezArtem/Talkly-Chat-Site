@@ -71,14 +71,24 @@ export function buildSystemPrompt(opts: {
     sections.push(
       `[REFERENCE INFORMATION -- use ONLY the content below to answer the user's question. Do not add, infer, or fabricate any information beyond what is explicitly stated here.${fallbackText}\n\nIMPORTANT: Each reference section includes a "Source URL". At the end of your response, always include the relevant source URL(s) so the user can read more. Format them as clickable links.]\n---\n${ragContext}\n---`
     );
+  } else if (escalation) {
+    const parts: string[] = [];
+    if (escalation.phone) parts.push(`phone ${escalation.phone}`);
+    if (escalation.url) parts.push(escalation.url);
+    if (escalation.email) parts.push(`email ${escalation.email}`);
+    if (parts.length > 0) {
+      sections.push(
+        `[NO KNOWLEDGE BASE CONTENT AVAILABLE -- answer using your operator instructions and general product knowledge. If you cannot answer confidently, direct the user to: ${parts.join(" or ")}.]`
+      );
+    }
   }
 
   return sections.join("\n\n");
 }
 
 function buildLanguageInstruction(language: ChatLanguage): string {
-  const instruction = language === "nl"
-    ? "Beantwoord de gebruiker in het Nederlands. Als de gebruiker later duidelijk van taal wisselt, volg dan de nieuwste taal van de gebruiker."
+  const instruction = language === "ru"
+    ? "Отвечайте пользователю на русском языке. Если пользователь явно переключится на другой язык, следуйте его последнему языку."
     : "Answer the user in English. If the user clearly switches languages later, follow the user's most recent language.";
 
   return `[RESPONSE LANGUAGE]\n${instruction}`;

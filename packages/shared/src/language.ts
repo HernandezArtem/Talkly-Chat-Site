@@ -1,16 +1,19 @@
 import { z } from "zod";
 
-export const chatLanguageSchema = z.enum(["nl", "en"]);
+export const chatLanguageSchema = z.enum(["en", "ru"]);
 export type ChatLanguage = z.infer<typeof chatLanguageSchema>;
 
-const DUTCH_WORDS = new Set([
-  "de", "het", "een", "van", "voor", "ik", "wij", "maar", "niet",
-  "ook", "dit", "dat", "zijn", "hebben", "met", "als", "kan", "wel",
-  "nog", "meer", "naar", "mijn", "wat", "hoe", "waar", "wanneer",
-  "u", "uw", "heeft", "heb", "hebt", "kunt", "moet", "moeten",
-  "welke", "deze", "die", "dan", "bij", "contact", "ondersteuning",
-  "product", "producten", "bestelling", "verzending", "retour",
-  "terugbetaling", "aanvraag", "aanvragen", "helpen", "hulp",
+const RUSSIAN_WORDS = new Set([
+  "и", "в", "на", "что", "как", "где", "когда", "почему", "это", "этот",
+  "эта", "эти", "мой", "моя", "мои", "ваш", "ваша", "ваши", "я", "мы",
+  "вы", "он", "она", "они", "не", "нет", "да", "или", "но", "для",
+  "при", "по", "из", "от", "до", "за", "под", "над", "мне", "меня",
+  "можно", "нужно", "хочу", "хотел", "хотела", "помогите", "помощь",
+  "поддержка", "контакт", "заказ", "доставка", "возврат", "цена",
+  "стоимость", "товар", "продукт", "счёт", "аккаунт", "вопрос",
+  "ответ", "информация", "сайт", "страница", "ссылка", "купить",
+  "оплата", "сколько", "какой", "какая", "какие", "какое", "есть",
+  "был", "была", "были", "будет", "можете", "могу", "нужна", "нужен",
 ]);
 
 const ENGLISH_WORDS = new Set([
@@ -18,14 +21,18 @@ const ENGLISH_WORDS = new Set([
   "when", "do", "can", "could", "should", "have", "has", "need", "needs",
   "support", "contact", "product", "products", "order", "shipping",
   "return", "returns", "refund", "request", "pricing", "plan", "plans",
-  "account", "help", "billing",
+  "account", "help", "billing", "information", "find", "offer", "about",
+  "hello", "hi", "good", "day", "much", "cost", "quote", "policy",
 ]);
 
-export function detectChatLanguage(text: string): ChatLanguage {
-  return detectChatLanguageFromTexts([text]);
+export function detectChatLanguage(text: string, fallback: ChatLanguage = "en"): ChatLanguage {
+  return detectChatLanguageFromTexts([text], fallback);
 }
 
-export function detectChatLanguageFromTexts(texts: string[]): ChatLanguage {
+export function detectChatLanguageFromTexts(
+  texts: string[],
+  fallback: ChatLanguage = "en"
+): ChatLanguage {
   const words = texts.flatMap((text) =>
     text
       .toLowerCase()
@@ -34,20 +41,29 @@ export function detectChatLanguageFromTexts(texts: string[]): ChatLanguage {
       .filter(Boolean)
   );
 
-  if (words.length === 0) return "en";
+  if (words.length === 0) return fallback;
 
-  let dutchHits = 0;
+  let russianHits = 0;
   let englishHits = 0;
 
   for (const word of words) {
-    if (DUTCH_WORDS.has(word)) dutchHits++;
+    if (RUSSIAN_WORDS.has(word)) russianHits++;
     if (ENGLISH_WORDS.has(word)) englishHits++;
   }
 
-  if (dutchHits === 0 && englishHits === 0) return "en";
-  if (englishHits > dutchHits) return "en";
-  if (dutchHits > englishHits) return "nl";
-  return "en";
+  if (russianHits === 0 && englishHits === 0) {
+    const combined = texts.join(" ");
+    if (/[\u0400-\u04FF]/.test(combined)) return "ru";
+    if (/[a-zA-Z]/.test(combined)) return "en";
+    return fallback;
+  }
+  if (englishHits > russianHits) return "en";
+  if (russianHits > englishHits) return "ru";
+  return fallback;
+}
+
+export function matchesLanguage(text: string, language: ChatLanguage): boolean {
+  return detectChatLanguage(text) === language;
 }
 
 export function normalizeQuestion(text: string): string {

@@ -8,7 +8,11 @@
       "i want to call",
       "phone number",
       "email support",
-      "open contact page"
+      "open contact page",
+      "как связаться",
+      "поддержка",
+      "номер телефона",
+      "контакт"
     ],
     "keywords": [
       "contact",
@@ -16,15 +20,19 @@
       "call",
       "phone",
       "email",
-      "helpdesk"
+      "helpdesk",
+      "контакт",
+      "поддержка",
+      "телефон",
+      "почта"
     ],
     "sourceBoosts": ["contact", "support"],
     "titleBoosts": ["contact", "support", "help"],
     "suggestions": {
-      "nl": [
-        "Hoe neem ik contact op?",
-        "Kan ik ook mailen?",
-        "Waar vind ik de contactpagina?"
+      "ru": [
+        "Как связаться с поддержкой?",
+        "Можно написать на почту?",
+        "Где найти страницу контактов?"
       ],
       "en": [
         "How do I contact support?",
@@ -43,7 +51,10 @@
       "how much does it cost",
       "what does it cost",
       "pricing page",
-      "subscription price"
+      "subscription price",
+      "сколько стоит",
+      "цена",
+      "стоимость"
     ],
     "keywords": [
       "pricing",
@@ -52,15 +63,18 @@
       "plan",
       "plans",
       "subscription",
-      "quote"
+      "quote",
+      "цена",
+      "стоимость",
+      "тариф"
     ],
     "sourceBoosts": ["pricing", "plans", "plan"],
     "titleBoosts": ["pricing", "plans", "price"],
     "suggestions": {
-      "nl": [
-        "Waar vind ik de prijzen?",
-        "Zijn er verschillende plannen?",
-        "Kan ik contact opnemen over een offerte?"
+      "ru": [
+        "Где найти цены?",
+        "Есть ли разные тарифы?",
+        "Можно узнать стоимость?"
       ],
       "en": [
         "Where can I find pricing?",
@@ -78,7 +92,10 @@
       "delivery time",
       "track my order",
       "order status",
-      "when will my order arrive"
+      "when will my order arrive",
+      "доставка",
+      "отследить заказ",
+      "когда придёт заказ"
     ],
     "keywords": [
       "shipping",
@@ -86,15 +103,18 @@
       "order",
       "tracking",
       "shipment",
-      "arrive"
+      "arrive",
+      "доставка",
+      "заказ",
+      "отслеживание"
     ],
     "sourceBoosts": ["shipping", "delivery", "track", "order"],
     "titleBoosts": ["shipping", "delivery", "order"],
     "suggestions": {
-      "nl": [
-        "Wat zijn de verzendtijden?",
-        "Hoe volg ik mijn bestelling?",
-        "Met wie neem ik contact op over een levering?"
+      "ru": [
+        "Какие сроки доставки?",
+        "Как отследить заказ?",
+        "С кем связаться по доставке?"
       ],
       "en": [
         "What are your shipping times?",
@@ -111,7 +131,10 @@
       "return policy",
       "how do i return",
       "refund request",
-      "exchange an item"
+      "exchange an item",
+      "возврат",
+      "обмен товара",
+      "возврат средств"
     ],
     "keywords": [
       "return",
@@ -119,15 +142,18 @@
       "refund",
       "exchange",
       "cancel",
-      "cancellation"
+      "cancellation",
+      "возврат",
+      "обмен",
+      "возмещение"
     ],
     "sourceBoosts": ["return", "refund", "exchange"],
     "titleBoosts": ["return", "refund", "exchange"],
     "suggestions": {
-      "nl": [
-        "Wat is jullie retourbeleid?",
-        "Hoe vraag ik een terugbetaling aan?",
-        "Kan ik een product omruilen?"
+      "ru": [
+        "Какая политика возврата?",
+        "Как оформить возврат средств?",
+        "Можно обменять товар?"
       ],
       "en": [
         "What is your return policy?",

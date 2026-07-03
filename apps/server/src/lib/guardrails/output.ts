@@ -20,7 +20,7 @@ export function filterOutput(text: string, config: GuardrailsConfig): GuardrailR
         };
       }
     } catch {
-      console.warn(`[Chattr] Invalid forbidden output pattern: ${patternStr}`);
+      console.warn(`[Talkly] Invalid forbidden output pattern: ${patternStr}`);
     }
   }
 

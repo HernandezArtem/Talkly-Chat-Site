@@ -2,8 +2,14 @@ export const messageStyles = `
   .zm-message {
     display: flex;
     gap: 8px;
-    max-width: 85%;
+    max-width: 88%;
     flex-direction: column;
+    animation: zm-msg-in 0.3s ease;
+  }
+
+  @keyframes zm-msg-in {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
   }
 
   .zm-message.user {
@@ -11,30 +17,35 @@ export const messageStyles = `
   }
 
   .zm-message-bubble {
-    padding: 10px 14px;
-    border-radius: 12px;
+    padding: 11px 15px;
+    border-radius: var(--zm-radius-sm);
     word-break: break-word;
+    font-size: 14px;
+    line-height: 1.55;
   }
 
   .zm-message.assistant .zm-message-bubble {
-    background: var(--zm-bg-secondary);
+    background: var(--zm-bg-elevated);
     color: var(--zm-text);
+    border: 1px solid var(--zm-border);
     border-bottom-left-radius: 4px;
     min-height: 41px;
     box-sizing: border-box;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
   }
 
   .zm-message.user .zm-message-bubble {
-    background: var(--zm-primary);
+    background: var(--zm-gradient);
     color: white;
     border-bottom-right-radius: 4px;
+    box-shadow: 0 2px 8px rgba(124, 58, 237, 0.25);
   }
 
   .zm-message-meta {
     display: flex;
     flex-direction: column;
     gap: 8px;
-    margin-top: 8px;
+    margin-top: 6px;
   }
 
   .zm-message-meta:empty {
@@ -43,12 +54,12 @@ export const messageStyles = `
 
   .zm-meta-label {
     display: block;
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 0.04em;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
     text-transform: uppercase;
-    color: #6b7280;
-    margin-bottom: 6px;
+    color: var(--zm-text-muted);
+    margin-bottom: 4px;
   }
 
   .zm-source-list {
@@ -61,12 +72,13 @@ export const messageStyles = `
     display: flex;
     flex-direction: column;
     gap: 2px;
-    padding: 8px 10px;
-    border-radius: 10px;
-    background: #fbfcfd;
+    padding: 9px 12px;
+    border-radius: var(--zm-radius-sm);
+    background: var(--zm-bg-elevated);
     border: 1px solid var(--zm-border);
     color: var(--zm-text);
     text-decoration: none;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
   }
 
   .zm-source-card strong {
@@ -80,7 +92,7 @@ export const messageStyles = `
 
   .zm-source-card span {
     font-size: 11px;
-    color: #6b7280;
+    color: var(--zm-text-muted);
     word-break: break-word;
     display: -webkit-box;
     -webkit-line-clamp: 1;
@@ -103,7 +115,7 @@ export const messageStyles = `
   .zm-feedback {
     display: flex;
     flex-wrap: wrap;
-    gap: 8px;
+    gap: 7px;
   }
 
   .zm-chip-group .zm-meta-label,
@@ -116,14 +128,14 @@ export const messageStyles = `
   .zm-action-button,
   .zm-feedback-button {
     border: 1px solid var(--zm-border);
-    background: white;
+    background: var(--zm-bg-elevated);
     color: var(--zm-text);
     border-radius: 999px;
-    padding: 8px 12px;
+    padding: 7px 13px;
     font-size: 12px;
     line-height: 1.2;
     cursor: pointer;
-    transition: border-color 0.15s ease, background 0.15s ease, color 0.15s ease;
+    transition: border-color 0.15s ease, background 0.15s ease, color 0.15s ease, transform 0.1s ease;
   }
 
   .zm-chip-button:hover,
@@ -131,23 +143,29 @@ export const messageStyles = `
   .zm-feedback-button:hover,
   .zm-source-card:hover {
     border-color: var(--zm-primary);
+    box-shadow: 0 1px 4px rgba(124, 58, 237, 0.1);
+  }
+
+  .zm-chip-button:active,
+  .zm-action-button:active {
+    transform: scale(0.97);
   }
 
   .zm-action-button {
-    background: var(--zm-primary);
-    border-color: var(--zm-primary);
+    background: var(--zm-gradient);
+    border-color: transparent;
     color: white;
   }
 
   .zm-action-button:hover {
-    background: var(--zm-primary-hover);
-    border-color: var(--zm-primary-hover);
+    opacity: 0.92;
+    border-color: transparent;
   }
 
   .zm-feedback-button.active {
-    background: var(--zm-bg-secondary);
+    background: var(--zm-primary-light);
     border-color: var(--zm-primary);
-    color: var(--zm-text);
+    color: var(--zm-primary);
   }
 
   .zm-message-bubble p {
@@ -161,7 +179,7 @@ export const messageStyles = `
   .zm-message-bubble code {
     background: rgba(0, 0, 0, 0.06);
     padding: 2px 5px;
-    border-radius: 3px;
+    border-radius: 4px;
     font-size: 13px;
     font-family: "SF Mono", Consolas, monospace;
   }
@@ -170,7 +188,7 @@ export const messageStyles = `
     background: #1e1e2e;
     color: #cdd6f4;
     padding: 12px;
-    border-radius: 8px;
+    border-radius: var(--zm-radius-sm);
     overflow-x: auto;
     margin: 8px 0;
     font-size: 13px;
@@ -190,6 +208,7 @@ export const messageStyles = `
   .zm-message-bubble a {
     color: var(--zm-primary);
     text-decoration: underline;
+    text-underline-offset: 2px;
   }
 
   .zm-message.user .zm-message-bubble a {
@@ -199,15 +218,17 @@ export const messageStyles = `
   .zm-typing {
     display: flex;
     align-items: center;
-    gap: 4px;
+    gap: 5px;
     height: 21px;
+    padding: 0 2px;
   }
 
   .zm-typing span {
-    width: 6px;
-    height: 6px;
+    width: 7px;
+    height: 7px;
     border-radius: 50%;
-    background: #9ca3af;
+    background: var(--zm-primary);
+    opacity: 0.4;
     animation: zm-bounce 1.4s ease-in-out infinite;
   }
 
@@ -220,16 +241,17 @@ export const messageStyles = `
   }
 
   @keyframes zm-bounce {
-    0%, 60%, 100% { transform: translateY(0); }
-    30% { transform: translateY(-4px); }
+    0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
+    30% { transform: translateY(-5px); opacity: 1; }
   }
 
   .zm-error {
     text-align: center;
-    padding: 8px 12px;
+    padding: 10px 14px;
     background: #fef2f2;
     color: #dc2626;
-    border-radius: 8px;
+    border: 1px solid #fecaca;
+    border-radius: var(--zm-radius-sm);
     font-size: 13px;
   }
 

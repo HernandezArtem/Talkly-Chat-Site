@@ -36,7 +36,7 @@ async function fetchPage(url: string): Promise<string | null> {
     const res = await fetch(url, {
       headers: {
         "User-Agent":
-          "ChattrBot/1.0 (website content ingestion for customer support)",
+          "TalklyBot/1.0 (website content ingestion for customer support)",
         Accept: "text/html,application/xml",
       },
       redirect: "follow",
@@ -350,7 +350,7 @@ async function scrapeTenant(
 
   if (storedChunks < pages.length) {
     throw new Error(
-      `[Chattr] Ingestion incomplete for ${tenantId}: stored ${storedChunks} chunks for ${pages.length} scraped pages`
+      `[Talkly] Ingestion incomplete for ${tenantId}: stored ${storedChunks} chunks for ${pages.length} scraped pages`
     );
   }
 

@@ -6,7 +6,7 @@ export interface DetectedChatIntent {
   sourceBoosts: string[];
   titleBoosts: string[];
   suggestions: {
-    nl: string[];
+    ru: string[];
     en: string[];
   };
   preferHandoff?: boolean;
@@ -21,7 +21,7 @@ interface IntentRule {
   sourceBoosts: string[];
   titleBoosts: string[];
   suggestions: {
-    nl: string[];
+    ru: string[];
     en: string[];
   };
   preferHandoff?: boolean;
@@ -64,7 +64,7 @@ export function detectChatIntent(
 
 export function getIntentSuggestions(
   intent: DetectedChatIntent | null,
-  language: "nl" | "en"
+  language: "ru" | "en"
 ): string[] {
   if (!intent) return [];
   return dedupe(intent.suggestions[language]);

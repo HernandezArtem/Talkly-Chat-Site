@@ -15,7 +15,11 @@ export class ChatApiClient {
     private tenantId?: string
   ) {}
 
-  async sendChat(request: { messages: Array<{ id: string; role: "user" | "assistant"; content: string }>; context?: string }): Promise<ChatApiResult> {
+  async sendChat(request: {
+    messages: Array<{ id: string; role: "user" | "assistant"; content: string }>;
+    context?: string;
+    language?: "en" | "ru";
+  }): Promise<ChatApiResult> {
     const response = await fetch(`${this.serverUrl}/api/chat`, {
       method: "POST",
       headers: {

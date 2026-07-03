@@ -161,7 +161,7 @@ export async function ingestDocuments(
 
     if (embeddings.length !== batch.length) {
       throw new Error(
-        `[Chattr] Embedding batch mismatch: got ${embeddings.length} embeddings for ${batch.length} chunks`
+        `[Talkly] Embedding batch mismatch: got ${embeddings.length} embeddings for ${batch.length} chunks`
       );
     }
 

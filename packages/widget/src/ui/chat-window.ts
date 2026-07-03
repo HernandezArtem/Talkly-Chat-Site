@@ -1,27 +1,41 @@
 import { createCloseIcon, createBotIcon, createSendIcon, setIcon } from "./icons";
 import { MessageComponent, MessageData, TypingIndicator } from "./message";
+import type { ChatLanguage } from "@chattr/shared";
 import type { WidgetCopy } from "../types";
+import { getWidgetCopy } from "../copy";
 
 export class ChatWindow {
   public el: HTMLElement;
   private messagesEl: HTMLElement;
   private inputEl: HTMLTextAreaElement;
   private sendBtn: HTMLButtonElement;
+  private subtitleEl: HTMLParagraphElement | null = null;
+  private langButtons: Partial<Record<ChatLanguage, HTMLButtonElement>> = {};
   private messages: MessageComponent[] = [];
   private typingIndicator: TypingIndicator | null = null;
+  private activeLanguage: ChatLanguage;
 
   constructor(
-    private config: { title: string; subtitle: string; avatarUrl: string; position: string },
+    private config: {
+      title: string;
+      subtitle: string;
+      avatarUrl: string;
+      position: string;
+      showLanguageSwitcher: boolean;
+    },
     private copy: WidgetCopy,
+    initialLanguage: ChatLanguage,
     private onSend: (text: string) => void,
-    private onClose: () => void
+    private onClose: () => void,
+    private onLanguageChange: (language: ChatLanguage) => void
   ) {
+    this.activeLanguage = initialLanguage;
+
     this.el = document.createElement("div");
     this.el.className = `zm-window ${config.position}`;
     this.el.setAttribute("role", "dialog");
     this.el.setAttribute("aria-label", config.title);
 
-    // Header
     const header = document.createElement("div");
     header.className = "zm-header";
 
@@ -33,7 +47,7 @@ export class ChatWindow {
     if (config.avatarUrl) {
       const img = document.createElement("img");
       img.src = config.avatarUrl;
-      img.alt = "Avatar";
+      img.alt = copy.avatarAlt;
       avatar.appendChild(img);
     } else {
       setIcon(avatar, createBotIcon);
@@ -46,30 +60,56 @@ export class ChatWindow {
     titleEl.textContent = config.title;
     headerText.appendChild(titleEl);
     if (config.subtitle) {
-      const subtitleEl = document.createElement("p");
-      subtitleEl.textContent = config.subtitle;
-      headerText.appendChild(subtitleEl);
+      this.subtitleEl = document.createElement("p");
+      this.subtitleEl.textContent = config.subtitle;
+      headerText.appendChild(this.subtitleEl);
     }
     headerInfo.appendChild(headerText);
     header.appendChild(headerInfo);
+
+    const headerActions = document.createElement("div");
+    headerActions.className = "zm-header-actions";
+
+    if (config.showLanguageSwitcher) {
+      const langSwitch = document.createElement("div");
+      langSwitch.className = "zm-lang-switch";
+      langSwitch.setAttribute("role", "group");
+      langSwitch.setAttribute("aria-label", copy.langSwitchAriaLabel);
+
+      for (const lang of ["ru", "en"] as ChatLanguage[]) {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "zm-lang-btn";
+        btn.dataset.lang = lang;
+        btn.textContent = lang.toUpperCase();
+        btn.setAttribute("aria-pressed", lang === initialLanguage ? "true" : "false");
+        if (lang === initialLanguage) btn.classList.add("active");
+        btn.addEventListener("click", () => {
+          if (lang !== this.activeLanguage) this.onLanguageChange(lang);
+        });
+        this.langButtons[lang] = btn;
+        langSwitch.appendChild(btn);
+      }
+
+      headerActions.appendChild(langSwitch);
+    }
 
     const closeBtn = document.createElement("button");
     closeBtn.className = "zm-close";
     closeBtn.setAttribute("aria-label", copy.closeChatAriaLabel);
     setIcon(closeBtn, createCloseIcon);
     closeBtn.addEventListener("click", () => this.onClose());
-    header.appendChild(closeBtn);
+    headerActions.appendChild(closeBtn);
+    header.appendChild(headerActions);
 
     this.el.appendChild(header);
 
-    // Messages area
     this.messagesEl = document.createElement("div");
     this.messagesEl.className = "zm-messages";
     this.messagesEl.setAttribute("role", "log");
     this.messagesEl.setAttribute("aria-live", "polite");
     this.el.appendChild(this.messagesEl);
 
-    // Input area
     const inputArea = document.createElement("div");
     inputArea.className = "zm-input-area";
 
@@ -95,7 +135,6 @@ export class ChatWindow {
 
     this.el.appendChild(inputArea);
 
-    // Escape key closes the window
     this.el.addEventListener("keydown", (e) => {
       if (e.key === "Escape") {
         this.onClose();
@@ -126,6 +165,18 @@ export class ChatWindow {
       this.scrollToBottom();
     }
     return msg;
+  }
+
+  getFirstAssistantMessage(): MessageComponent | undefined {
+    return this.messages.find((message) => message.data.role === "assistant");
+  }
+
+  clearMessages() {
+    for (const message of this.messages) {
+      message.el.remove();
+    }
+    this.messages = [];
+    this.hideTyping();
   }
 
   showTyping() {
@@ -204,6 +255,41 @@ export class ChatWindow {
 
   close() {
     this.el.classList.remove("open");
+  }
+
+  setActiveLanguage(language: ChatLanguage) {
+    this.activeLanguage = language;
+    for (const [lang, btn] of Object.entries(this.langButtons) as [ChatLanguage, HTMLButtonElement][]) {
+      const active = lang === language;
+      btn.classList.toggle("active", active);
+      btn.setAttribute("aria-pressed", active ? "true" : "false");
+    }
+  }
+
+  setSubtitle(subtitle: string) {
+    if (!this.subtitleEl) {
+      if (!subtitle) return;
+      this.subtitleEl = document.createElement("p");
+      const headerText = this.el.querySelector(".zm-header-text");
+      headerText?.appendChild(this.subtitleEl);
+    }
+    this.subtitleEl.textContent = subtitle;
+    this.subtitleEl.style.display = subtitle ? "" : "none";
+  }
+
+  updateCopy(copy: WidgetCopy) {
+    this.copy = copy;
+    this.inputEl.placeholder = copy.inputPlaceholder;
+    this.sendBtn.setAttribute("aria-label", copy.sendMessageAriaLabel);
+    const closeBtn = this.el.querySelector(".zm-close");
+    if (closeBtn) closeBtn.setAttribute("aria-label", copy.closeChatAriaLabel);
+    const langSwitch = this.el.querySelector(".zm-lang-switch");
+    if (langSwitch) langSwitch.setAttribute("aria-label", copy.langSwitchAriaLabel);
+    for (const msg of this.messages) {
+      if (msg.data.role === "assistant" && msg.data.language) {
+        msg.setCopy(getWidgetCopy(msg.data.language));
+      }
+    }
   }
 
   mount(parent: ShadowRoot) {

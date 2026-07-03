@@ -1,5 +1,6 @@
 {
-  "name": "chattr",
+  "name": "talkly",
+  "author": "HernandezArtem",
   "private": true,
   "scripts": {
     "dev": "turbo dev",

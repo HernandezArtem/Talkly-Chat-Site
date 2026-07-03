@@ -56,7 +56,7 @@ export function insertDocument(
   const expected = getEmbeddingDimensions();
   if (embedding.length !== expected) {
     throw new Error(
-      `[Chattr] Invalid embedding size: expected ${expected}, got ${embedding.length}. ` +
+      `[Talkly] Invalid embedding size: expected ${expected}, got ${embedding.length}. ` +
         `If you switched providers, the existing database was built for a different embedding model. ` +
         `Either re-ingest from scratch (clear ./data) or restore the previous CHATTR_PROVIDER.`
     );

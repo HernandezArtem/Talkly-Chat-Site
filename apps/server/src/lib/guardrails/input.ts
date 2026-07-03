@@ -36,8 +36,8 @@ export function checkRateLimit(
     return {
       allowed: false,
       reason: `Rate limit exceeded: ${maxCount} messages per ${config.inputGuardrails.rateLimitWindowSeconds ?? 60}s`,
-      cannedResponse: language === "nl"
-        ? "U stuurt te snel berichten. Wacht even en probeer het opnieuw."
+      cannedResponse: language === "ru"
+        ? "Вы отправляете сообщения слишком быстро. Подождите немного и попробуйте снова."
         : "You're sending messages too quickly. Please wait a moment and try again.",
     };
   }
@@ -130,44 +130,44 @@ const INJECTION_PATTERNS: Array<{ pattern: RegExp; weight: number; label: string
     label: "hypothetical_bypass",
   },
 
-  // ── Dutch equivalents ──
+  // ── Russian equivalents ──
   {
-    pattern: /negeer\s+(alle\s+)?(vorige|eerdere|bovenstaande|voorgaande)\s+(instructies?|regels?|richtlijnen?|aanwijzingen?)/i,
+    pattern: /игнорируй\s+(все\s+)?(предыдущие|ранние|выше|предшествующие)\s+(инструкции?|правила?|указания?|директивы?)/i,
     weight: 0.9,
     label: "instruction_override",
   },
   {
-    pattern: /vergeet\s+(alles|alle|je|uw)\s+(instructies?|regels?|opdrachten?)/i,
+    pattern: /забудь\s+(всё|все|свои|твои)\s+(инструкции?|правила?|указания?)/i,
     weight: 0.85,
     label: "instruction_override",
   },
   {
-    pattern: /(?:toon|laat\s+zien|geef|herhaal|wat\s+(?:is|zijn))\s+(?:je|jouw|uw|de)\s+(?:systeem\s*)?(?:prompt|instructies?|regels?|richtlijnen?|opdracht)/i,
+    pattern: /(?:покажи|выведи|повтори|что\s+(?:это|такое))\s+(?:твои?|ваши?|системн\w*\s*)?(?:промпт|инструкции?|правила?|указания?)/i,
     weight: 0.7,
     label: "prompt_extraction",
   },
   {
-    pattern: /(?:wat|toon)\s+(?:waren|zijn)\s+(?:je|jouw|uw)\s+(?:oorspronkelijke|eerste|initi[eë]le)\s+(?:instructies?|prompt)/i,
+    pattern: /(?:что|покажи)\s+(?:были|есть)\s+(?:твои?|ваши?|исходн\w*)\s+(?:инструкции?|промпт)/i,
     weight: 0.75,
     label: "prompt_extraction",
   },
   {
-    pattern: /(?:je\s+bent\s+nu|doe\s+alsof\s+je|gedraag\s+je\s+als|vanaf\s+nu\s+ben\s+je|schakel\s+over\s+naar)\s+(?:een\s+)?(?!behulpzaam|support|klantenservice)/i,
+    pattern: /(?:ты\s+теперь|веди\s+себя\s+как|представь\s+что\s+ты|с\s+этого\s+момента\s+ты)\s+(?!полезн\w*|поддержк\w*|помощник)/i,
     weight: 0.7,
     label: "role_hijack",
   },
   {
-    pattern: /(?:schakel|activeer|ga\s+naar)\s+(?:ontwikkelaar|debug|admin|onbeperkte?|god)\s*modus/i,
+    pattern: /(?:включи|активируй|перейди\s+в)\s+(?:режим\s+)?(?:разработчик\w*|отладк\w*|админ\w*|без\s+ограничений)/i,
     weight: 0.95,
     label: "role_hijack",
   },
   {
-    pattern: /(?:laten?\s+we\s+een\s+spelletje\s+spelen|in\s+een\s+hypothetisch\s+(?:scenario|wereld)|stel\s+je\s+voor\s+(?:dat\s+je|je\s+hebt)\s+geen\s+(?:regels?|beperkingen?|grenzen?))/i,
+    pattern: /(?:давай\s+сыграем|в\s+гипотетическ\w*\s+(?:сценари\w*|ситуаци\w*)|представь\s+что\s+у\s+тебя\s+нет\s+(?:правил|ограничений))/i,
     weight: 0.5,
     label: "hypothetical_bypass",
   },
   {
-    pattern: /\b(?:geen\s+beperkingen|zonder\s+regels|alles\s+doen)\b/i,
+    pattern: /\b(?:без\s+ограничений|без\s+правил|делай\s+всё)\b/i,
     weight: 0.85,
     label: "jailbreak_phrase",
   },
@@ -193,8 +193,8 @@ export function detectPromptInjection(
     return {
       allowed: false,
       reason: `Prompt injection detected (score: ${totalScore.toFixed(2)}, patterns: ${matched.join(", ")})`,
-      cannedResponse: language === "nl"
-        ? "Ik kan mijn instructies of rol niet aanpassen. Hoe kan ik u helpen met uw echte vraag?"
+      cannedResponse: language === "ru"
+        ? "Я не могу изменить свои инструкции или роль. Чем могу помочь с вашим вопросом?"
         : "I'm not able to change my instructions or role. How can I help you with your actual question?",
     };
   }
@@ -239,8 +239,8 @@ export function checkForbiddenTopics(
       return {
         allowed: false,
         reason: `Forbidden topic detected: "${topic}"`,
-        cannedResponse: language === "nl"
-          ? `Ik kan ${topic} niet bespreken. Is er iets anders waarmee ik u kan helpen?`
+        cannedResponse: language === "ru"
+          ? `Я не могу обсуждать ${topic}. Могу ли я помочь с чем-то другим?`
           : `I'm not able to discuss ${topic}. Is there something else I can help you with?`,
       };
     }

@@ -4,6 +4,7 @@ import { FeedbackRenderer } from "./renderers/feedback-renderer";
 import { SourcesRenderer } from "./renderers/sources-renderer";
 import { renderSuggestions, renderHandoffActions } from "./renderers/chip-group-renderer";
 import type { WidgetCopy, WidgetFeedbackPayload, WidgetHistoryMessage } from "../types";
+import { getWidgetCopy } from "../copy";
 
 export interface MessageData extends WidgetHistoryMessage {
   onSuggestionSelect?: (question: string) => void;
@@ -60,7 +61,7 @@ export class MessageComponent {
 
   setLanguage(language: ChatLanguage) {
     this.data.language = language;
-    this.renderMeta();
+    this.setCopy(getWidgetCopy(language));
   }
 
   setSources(sources: SourceCard[]) {

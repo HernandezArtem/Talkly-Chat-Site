@@ -1,59 +1,271 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Chattr Demo</title>
+  <title>Talkly — Демо</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
     body {
-      font-family: system-ui, -apple-system, sans-serif;
-      max-width: 800px;
-      margin: 0 auto;
-      padding: 40px 20px;
-      color: #1f2937;
-      background: #f9fafb;
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      color: #18181b;
+      background: linear-gradient(135deg, #faf5ff 0%, #f4f4f5 50%, #ede9fe 100%);
+      min-height: 100vh;
     }
-    h1 { font-size: 2rem; margin-bottom: 8px; }
-    p { color: #6b7280; line-height: 1.6; }
+
+    .hero {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 64px 24px 48px;
+      text-align: center;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 6px 14px;
+      background: rgba(124, 58, 237, 0.1);
+      color: #7c3aed;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 20px;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      margin-bottom: 12px;
+      background: linear-gradient(135deg, #7c3aed, #5b21b6);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .subtitle {
+      font-size: 1.1rem;
+      color: #71717a;
+      line-height: 1.6;
+      margin-bottom: 28px;
+    }
+
+    .lang-switch {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+      margin-bottom: 36px;
+    }
+
+    .lang-switch button {
+      padding: 8px 18px;
+      border: 1px solid #e4e4e7;
+      border-radius: 8px;
+      background: white;
+      color: #71717a;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      font-family: inherit;
+    }
+
+    .lang-switch button.active {
+      background: #7c3aed;
+      color: white;
+      border-color: #7c3aed;
+    }
+
+    .lang-switch button:hover:not(.active) {
+      border-color: #7c3aed;
+      color: #7c3aed;
+    }
+
+    .card {
+      background: white;
+      border: 1px solid #e4e4e7;
+      border-radius: 16px;
+      padding: 28px;
+      text-align: left;
+      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+    }
+
+    .card h2 {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 12px;
+      color: #18181b;
+    }
+
+    .card p {
+      font-size: 14px;
+      color: #71717a;
+      line-height: 1.65;
+      margin-bottom: 16px;
+    }
+
+    .card p:last-of-type {
+      margin-bottom: 0;
+    }
+
     code {
-      background: #e5e7eb;
+      background: #f4f4f5;
       padding: 2px 6px;
       border-radius: 4px;
-      font-size: 0.9em;
+      font-size: 0.88em;
+      color: #7c3aed;
     }
+
     pre {
-      background: #1e1e2e;
-      color: #cdd6f4;
-      padding: 16px;
-      border-radius: 8px;
+      background: #18181b;
+      color: #e4e4e7;
+      padding: 20px;
+      border-radius: 12px;
       overflow-x: auto;
-      font-size: 0.85em;
+      font-size: 0.82em;
+      line-height: 1.6;
+      margin-top: 16px;
+    }
+
+    .hint {
+      margin-top: 32px;
+      font-size: 14px;
+      color: #a1a1aa;
       line-height: 1.5;
     }
   </style>
 </head>
 <body>
-  <h1>Chattr Demo</h1>
-  <p>
-    This page demonstrates the Chattr embeddable chatbot widget.
-    Click the chat bubble in the bottom-right corner to start a conversation.
-  </p>
-  <p>
-    To embed Chattr on your own site, add this script tag:
-  </p>
-  <pre>&lt;script
+  <div class="hero">
+    <div class="badge">Talkly Widget</div>
+    <h1 id="page-title">Умный чат для вашего сайта</h1>
+    <p class="subtitle" id="page-subtitle">
+      Встраиваемый AI-чат для сайта. Откройте виджет в правом нижнем углу и задайте вопрос.
+    </p>
+
+    <div class="lang-switch" role="group" id="lang-switch" aria-label="Язык сайта">
+      <button type="button" id="btn-ru" class="active" onclick="setSiteLanguage('ru')">Русский</button>
+      <button type="button" id="btn-en" onclick="setSiteLanguage('en')">English</button>
+    </div>
+
+    <div class="card">
+      <h2 id="embed-title">Встраивание на сайт</h2>
+      <p id="embed-desc">
+        Скопируйте тег <code>&lt;script&gt;</code> и вставьте его перед закрывающим
+        <code>&lt;/body&gt;</code> на своей странице. Укажите адрес вашего сервера
+        в <code>data-server</code> и язык по умолчанию в <code>data-language</code>
+        (<code>ru</code> или <code>en</code>). После этого виджет появится в углу экрана.
+      </p>
+      <pre id="embed-code">&lt;script
   src="https://your-server.com/widget.js"
   data-server="https://your-server.com"
-  data-theme-primary="#e27d60"
-  data-theme-title="Ask me anything"
+  data-language="ru"
+  data-theme-primary="#7c3aed"
+  data-theme-title="Talkly"
   defer
 &gt;&lt;/script&gt;</pre>
+    </div>
 
-  <script id="chattr-widget" src="/widget.js"
+    <p class="hint" id="page-hint">
+      Переключатель языка выше меняет текст страницы и интерфейс чата одновременно.
+    </p>
+  </div>
+
+  <script id="talkly-widget" src="/widget.js"
     data-server="http://localhost:3000"
-    data-theme-primary="#e27d60"
-    data-theme-title="Chattr"
-    data-theme-subtitle="Answers from your website"
-    data-theme-avatar="/Chattr.png"></script>
+    data-language="ru"
+    data-theme-primary="#7c3aed"
+    data-theme-title="Talkly"
+    data-theme-avatar="/avatar.svg"
+    data-show-language-switcher="false"></script>
+
+  <script>
+    const COPY = {
+      ru: {
+        htmlLang: 'ru',
+        docTitle: 'Talkly — Демо',
+        langSwitchAria: 'Язык сайта',
+        pageTitle: 'Умный чат для вашего сайта',
+        pageSubtitle: 'Встраиваемый AI-чат для сайта. Откройте виджет в правом нижнем углу и задайте вопрос.',
+        embedTitle: 'Встраивание на сайт',
+        embedDesc: 'Скопируйте тег <code>&lt;script&gt;</code> и вставьте его перед закрывающим <code>&lt;/body&gt;</code> на своей странице. Укажите адрес вашего сервера в <code>data-server</code> и язык по умолчанию в <code>data-language</code> (<code>ru</code> или <code>en</code>). После этого виджет появится в углу экрана.',
+        pageHint: 'Переключатель языка выше меняет текст страницы и интерфейс чата одновременно.',
+      },
+      en: {
+        htmlLang: 'en',
+        docTitle: 'Talkly — Demo',
+        langSwitchAria: 'Site language',
+        pageTitle: 'Smart chat for your website',
+        pageSubtitle: 'An embeddable AI chat widget. Open it in the bottom-right corner and ask a question.',
+        embedTitle: 'Embed on your site',
+        embedDesc: 'Copy the <code>&lt;script&gt;</code> tag and paste it before the closing <code>&lt;/body&gt;</code> on your page. Set your server URL in <code>data-server</code> and the default language in <code>data-language</code> (<code>ru</code> or <code>en</code>). The widget will appear in the corner of the screen.',
+        pageHint: 'The language switcher above updates both this page and the chat widget.',
+      },
+    };
+
+    let currentLang = localStorage.getItem('talkly-demo-lang') || 'ru';
+
+    function renderEmbedCode(lang) {
+      return `<script
+  src="https://your-server.com/widget.js"
+  data-server="https://your-server.com"
+  data-language="${lang}"
+  data-theme-primary="#7c3aed"
+  data-theme-title="Talkly"
+  defer
+><\\/script>`;
+    }
+
+    function getTalklyApi() {
+      return window.Talkly ?? window.Chattr ?? null;
+    }
+
+    function setWidgetLanguage(lang) {
+      const api = getTalklyApi();
+      if (api) {
+        api.setLanguage(lang);
+        return;
+      }
+      const wait = setInterval(() => {
+        const ready = getTalklyApi();
+        if (ready) {
+          clearInterval(wait);
+          ready.setLanguage(lang);
+        }
+      }, 50);
+      setTimeout(() => clearInterval(wait), 10000);
+    }
+
+    function setSiteLanguage(lang) {
+      if (lang !== 'ru' && lang !== 'en') return;
+      currentLang = lang;
+      localStorage.setItem('talkly-demo-lang', lang);
+
+      const copy = COPY[lang];
+      document.documentElement.lang = copy.htmlLang;
+      document.title = copy.docTitle;
+
+      document.getElementById('page-title').textContent = copy.pageTitle;
+      document.getElementById('page-subtitle').textContent = copy.pageSubtitle;
+      document.getElementById('embed-title').textContent = copy.embedTitle;
+      document.getElementById('embed-desc').innerHTML = copy.embedDesc;
+      document.getElementById('page-hint').textContent = copy.pageHint;
+      document.getElementById('embed-code').textContent = renderEmbedCode(lang);
+      document.getElementById('lang-switch').setAttribute('aria-label', copy.langSwitchAria);
+
+      document.getElementById('btn-ru').classList.toggle('active', lang === 'ru');
+      document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+
+      const widgetScript = document.getElementById('talkly-widget');
+      if (widgetScript) widgetScript.dataset.language = lang;
+
+      setWidgetLanguage(lang);
+    }
+
+    setSiteLanguage(currentLang);
+  </script>
 </body>
 </html>

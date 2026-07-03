@@ -1,50 +1,89 @@
 import type { ChatLanguage } from "@chattr/shared";
+import { matchesLanguage } from "@chattr/shared";
 import type { WidgetConfig, WidgetCopy } from "./types";
 
-export function getWidgetCopy(language: ChatLanguage): WidgetCopy {
-  if (language === "en") {
-    return {
-      bubbleAriaLabel: "Toggle chat",
-      closeNudgeAriaLabel: "Close prompt",
-      closeChatAriaLabel: "Close chat",
-      inputPlaceholder: "Type a message...",
-      sendMessageAriaLabel: "Send message",
-      retryLabel: "Retry",
-      nextStepLabel: "Next step",
-      directActionLabel: "Take action",
-      sourcesLabel: "Sources",
-      moreSourcesLabel: (count) => `More sources (${count})`,
-      fewerSourcesLabel: "Fewer sources",
-      feedbackPromptLabel: "Was this answer useful?",
-      feedbackThanksLabel: "Thanks for your feedback",
-      feedbackPositiveLabel: "Helpful",
-      feedbackNegativeLabel: "Needs work",
-      feedbackReasons: ["Unclear", "Answer missing", "Wrong link"],
-      errorMessage: "Failed to get response.",
-      defaultWelcomeMessage: "How can I help you?",
-    };
-  }
+const COPY: Record<ChatLanguage, WidgetCopy> = {
+  en: {
+    bubbleAriaLabel: "Toggle chat",
+    closeNudgeAriaLabel: "Close prompt",
+    closeChatAriaLabel: "Close chat",
+    inputPlaceholder: "Type a message...",
+    sendMessageAriaLabel: "Send message",
+    retryLabel: "Retry",
+    nextStepLabel: "Next step",
+    directActionLabel: "Take action",
+    sourcesLabel: "Sources",
+    moreSourcesLabel: (count) => `More sources (${count})`,
+    fewerSourcesLabel: "Fewer sources",
+    feedbackPromptLabel: "Was this answer useful?",
+    feedbackThanksLabel: "Thanks for your feedback",
+    feedbackPositiveLabel: "Helpful",
+    feedbackNegativeLabel: "Needs work",
+    feedbackReasons: ["Unclear", "Answer missing", "Wrong link"],
+    errorMessage: "Failed to get response.",
+    defaultWelcomeMessage: "Hi! I'm the Talkly assistant. How can I help?",
+    subtitle: "Answers from your website",
+    bubbleMessage: "Ask a question",
+    langSwitchAriaLabel: "Chat language",
+    avatarAlt: "Avatar",
+  },
+  ru: {
+    bubbleAriaLabel: "Открыть или закрыть чат",
+    closeNudgeAriaLabel: "Закрыть подсказку",
+    closeChatAriaLabel: "Закрыть чат",
+    inputPlaceholder: "Введите сообщение...",
+    sendMessageAriaLabel: "Отправить сообщение",
+    retryLabel: "Повторить",
+    nextStepLabel: "Следующий шаг",
+    directActionLabel: "Перейти к действию",
+    sourcesLabel: "Источники",
+    moreSourcesLabel: (count) => `Ещё источники (${count})`,
+    fewerSourcesLabel: "Меньше источников",
+    feedbackPromptLabel: "Был ли этот ответ полезен?",
+    feedbackThanksLabel: "Спасибо за отзыв",
+    feedbackPositiveLabel: "Полезно",
+    feedbackNegativeLabel: "Нужно улучшить",
+    feedbackReasons: ["Непонятно", "Нет ответа", "Неверная ссылка"],
+    errorMessage: "Не удалось получить ответ.",
+    defaultWelcomeMessage: "Привет! Я ассистент Talkly. Чем могу помочь?",
+    subtitle: "Ответы с вашего сайта",
+    bubbleMessage: "Задайте вопрос",
+    langSwitchAriaLabel: "Язык чата",
+    avatarAlt: "Аватар",
+  },
+};
 
-  return {
-    bubbleAriaLabel: "Chat openen of sluiten",
-    closeNudgeAriaLabel: "Melding sluiten",
-    closeChatAriaLabel: "Chat sluiten",
-    inputPlaceholder: "Typ een bericht...",
-    sendMessageAriaLabel: "Bericht versturen",
-    retryLabel: "Opnieuw proberen",
-    nextStepLabel: "Volgende stap",
-    directActionLabel: "Direct regelen",
-    sourcesLabel: "Bronnen",
-    moreSourcesLabel: (count) => `Meer bronnen (${count})`,
-    fewerSourcesLabel: "Minder bronnen",
-    feedbackPromptLabel: "Was dit antwoord nuttig?",
-    feedbackThanksLabel: "Bedankt voor uw feedback",
-    feedbackPositiveLabel: "Handig",
-    feedbackNegativeLabel: "Kan beter",
-    feedbackReasons: ["Onduidelijk", "Antwoord ontbreekt", "Verkeerde link"],
-    errorMessage: "Er ging iets mis bij het ophalen van een antwoord.",
-    defaultWelcomeMessage: "Waarmee kan ik u helpen?",
-  };
+export function getWidgetCopy(language: ChatLanguage): WidgetCopy {
+  return COPY[language];
+}
+
+/** Labels inside an assistant bubble follow the response language, not the site UI. */
+export function getAssistantMessageCopy(language: ChatLanguage): WidgetCopy {
+  return getWidgetCopy(language);
+}
+
+export function resolveWelcomeMessage(
+  language: ChatLanguage,
+  override?: string
+): string {
+  if (override && matchesLanguage(override, language)) return override;
+  return COPY[language].defaultWelcomeMessage;
+}
+
+export function resolveSubtitle(
+  language: ChatLanguage,
+  themeSubtitle?: string
+): string {
+  if (themeSubtitle && matchesLanguage(themeSubtitle, language)) return themeSubtitle;
+  return COPY[language].subtitle;
+}
+
+export function resolveBubbleMessage(
+  language: ChatLanguage,
+  override?: string
+): string {
+  if (override && matchesLanguage(override, language)) return override;
+  return COPY[language].bubbleMessage;
 }
 
 export function buildRepeatEscalationMessage(
@@ -59,9 +98,9 @@ export function buildRepeatEscalationMessage(
     return message;
   }
 
-  let message = "Het lijkt erop dat ik u niet volledig kan helpen met deze vraag.";
-  if (escalation?.phone) message += ` U kunt ons bellen op ${escalation.phone}.`;
-  if (escalation?.url) message += ` Of bezoek ${escalation.url}.`;
-  if (escalation?.email) message += ` Of mail naar ${escalation.email}.`;
+  let message = "Похоже, я не могу полностью помочь с этим вопросом.";
+  if (escalation?.phone) message += ` Вы можете позвонить нам: ${escalation.phone}.`;
+  if (escalation?.url) message += ` Или перейти на ${escalation.url}.`;
+  if (escalation?.email) message += ` Или написать на ${escalation.email}.`;
   return message;
 }

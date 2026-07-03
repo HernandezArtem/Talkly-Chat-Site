@@ -3,7 +3,7 @@ import type { WidgetHistoryMessage, WidgetSessionData } from "../types";
 export class WidgetSessionStore {
   constructor(
     private key?: string,
-    private version = 2
+    private version = 3
   ) {}
 
   save(data: WidgetSessionData) {
@@ -25,6 +25,7 @@ export class WidgetSessionStore {
           language: message.language,
         })),
         welcomed: data.welcomed,
+        language: data.language,
       }));
     } catch {
       // sessionStorage may be unavailable.
@@ -42,6 +43,7 @@ export class WidgetSessionStore {
         v?: number;
         messages?: WidgetHistoryMessage[];
         welcomed?: boolean;
+        language?: WidgetSessionData["language"];
       };
 
       if (parsed.v !== this.version || !Array.isArray(parsed.messages)) {
@@ -52,6 +54,7 @@ export class WidgetSessionStore {
       return {
         messages: parsed.messages,
         welcomed: Boolean(parsed.welcomed),
+        language: parsed.language,
       };
     } catch {
       return null;

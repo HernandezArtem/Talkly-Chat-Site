@@ -7,7 +7,8 @@ export const baseStyles = `
     font-family: var(--zm-font);
     color: var(--zm-text);
     font-size: 14px;
-    line-height: 1.5;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
   }
 
   *, *::before, *::after {
@@ -19,35 +20,35 @@ export const baseStyles = `
   .chattr-bubble,
   .zm-bubble {
     position: fixed;
-    bottom: 20px;
+    bottom: 24px;
     width: var(--zm-bubble-size);
     height: var(--zm-bubble-size);
     border-radius: 50%;
-    background: var(--zm-primary);
+    background: var(--zm-gradient);
     color: white;
     border: none;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    transition: transform 0.2s ease, background 0.2s ease;
+    box-shadow: var(--zm-shadow-sm), 0 0 0 4px rgba(124, 58, 237, 0.15);
+    transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s ease;
     z-index: 2147483647;
   }
 
   .chattr-bubble:hover,
   .zm-bubble:hover {
-    transform: scale(1.05);
-    background: var(--zm-primary-hover);
+    transform: scale(1.08);
+    box-shadow: var(--zm-shadow-sm), 0 0 0 6px rgba(124, 58, 237, 0.2);
   }
 
   .chattr-bubble.bottom-right,
   .zm-bubble.bottom-right {
-    right: 20px;
+    right: 24px;
   }
 
   .chattr-bubble.bottom-left,
   .zm-bubble.bottom-left {
-    left: 20px;
+    left: 24px;
   }
 `;

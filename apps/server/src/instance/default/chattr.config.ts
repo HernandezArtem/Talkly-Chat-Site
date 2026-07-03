@@ -4,20 +4,21 @@ export default defineInstanceConfig({
   defaultTenantId: "default",
   tenants: {
     default: {
-      name: "Chattr Demo",
+      name: "Talkly Demo",
       dbPath: "./data/default.db",
       scrapeUrl: "https://example.com",
-      systemPrompt: "You are a helpful website assistant for a generic business website. Help visitors with questions about products, pricing, shipping, returns, account help, and support. If the knowledge base does not contain the answer, say so clearly and offer the available contact options.",
+      systemPrompt: "You are a helpful website assistant for a generic business website. Help visitors with questions about products, pricing, shipping, returns, account help, and support. If the knowledge base does not contain the answer, say so clearly and offer the available contact options. Respond in the same language the user writes in.",
       widget: {
         theme: {
-          primaryColor: "#0f766e",
-          title: "Chattr",
-          subtitle: "Answers from your website",
-          avatarUrl: "/Chattr.png",
+          primaryColor: "#7c3aed",
+          title: "Talkly",
+          avatarUrl: "/avatar.svg",
         },
-        bubbleMessage: "Ask a question",
-        welcomeMessage: "Hi, I'm the Chattr assistant. How can I help?",
         starterQuestions: [
+          "Как связаться с поддержкой?",
+          "Какие продукты вы предлагаете?",
+          "Есть ли информация о ценах?",
+          "Какая политика возврата?",
           "How do I contact support?",
           "What products do you offer?",
           "Do you have pricing information?",
@@ -56,8 +57,8 @@ export default defineInstanceConfig({
             "\\b\\d{4}[\\s-]?\\d{4}[\\s-]?\\d{4}[\\s-]?\\d{4}\\b",
           ],
           redirects: {
-            complaint: "Please visit our contact page or reach out to support for help with complaints or escalations.",
-            privacy: "For privacy-related questions, please review the privacy policy or contact support.",
+            complaint: "Пожалуйста, посетите нашу страницу контактов или обратитесь в поддержку по вопросам жалоб.",
+            privacy: "По вопросам конфиденциальности ознакомьтесь с политикой или свяжитесь с поддержкой.",
           },
           customRules: [
             "Only provide information that is explicitly present in the reference content when answering knowledge-base questions.",

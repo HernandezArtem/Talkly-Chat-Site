@@ -1,12 +1,14 @@
 import type { ChatConfidence, ChatJsonResponse, ChatLanguage, HandoffAction, SourceCard } from "@chattr/shared";
-import { getWidgetCopy } from "../copy";
+import { matchesLanguage } from "@chattr/shared";
+import { getAssistantMessageCopy, getWidgetCopy } from "../copy";
 import type { WidgetFeedbackPayload, WidgetHistoryMessage } from "../types";
 import type { ChatWindow } from "../ui/chat-window";
 import { ChatStreamParser } from "./stream-parser";
 
 export function renderJsonAssistantResponse(opts: {
   chatWindow: ChatWindow;
-  language: ChatLanguage;
+  uiLanguage: ChatLanguage;
+  responseLanguage: ChatLanguage;
   response: ChatJsonResponse;
   userQuestion?: string;
   suggestions: string[];
@@ -15,7 +17,7 @@ export function renderJsonAssistantResponse(opts: {
   onHandoffAction: (action: HandoffAction) => void;
   onFeedbackSubmit: (payload: WidgetFeedbackPayload) => void;
 }): WidgetHistoryMessage {
-  const copy = getWidgetCopy(opts.language);
+  const copy = getAssistantMessageCopy(opts.responseLanguage);
   const message: WidgetHistoryMessage = {
     id: crypto.randomUUID(),
     role: "assistant",
@@ -24,7 +26,7 @@ export function renderJsonAssistantResponse(opts: {
     feedbackQuestion: opts.userQuestion,
     suggestions: opts.suggestions,
     handoffActions: opts.handoffActions,
-    language: opts.language,
+    language: opts.responseLanguage,
   };
 
   const component = opts.chatWindow.addMessage(message, copy);
@@ -53,9 +55,10 @@ export class StreamResponseRenderer {
 
   constructor(private opts: {
     chatWindow: ChatWindow;
-    getLanguage: () => ChatLanguage;
+    getUiLanguage: () => ChatLanguage;
+    getResponseLanguage: () => ChatLanguage;
     getUserQuestion: () => string | undefined;
-    getStarterSuggestions: (currentQuestion?: string) => string[];
+    getStarterSuggestions: (currentQuestion?: string, language?: ChatLanguage) => string[];
     getHandoffActions: (language: ChatLanguage) => HandoffAction[];
     onSend: (question: string) => void;
     onHandoffAction: (action: HandoffAction) => void;
@@ -112,13 +115,13 @@ export class StreamResponseRenderer {
   private appendText(text: string) {
     if (!this.currentAssistantMsg) {
       this.opts.chatWindow.hideTyping();
-      const language = this.opts.getLanguage();
-      const copy = getWidgetCopy(language);
+      const responseLanguage = this.opts.getResponseLanguage();
+      const copy = getAssistantMessageCopy(responseLanguage);
       const assistantMessage: WidgetHistoryMessage = {
         id: crypto.randomUUID(),
         role: "assistant",
         content: "",
-        language,
+        language: responseLanguage,
       };
       this.currentAssistantMsg = this.opts.chatWindow.addMessage(assistantMessage, copy);
     }
@@ -130,14 +133,15 @@ export class StreamResponseRenderer {
   private finalize(): WidgetHistoryMessage | null {
     if (!this.currentAssistantMsg) return null;
 
-    const language = this.opts.getLanguage();
+    const responseLanguage = this.opts.getResponseLanguage();
     const userQuestion = this.opts.getUserQuestion();
-    const suggestions = this.pendingSuggestions.length
+    const suggestions = (this.pendingSuggestions.length
       ? this.pendingSuggestions
-      : this.opts.getStarterSuggestions(userQuestion);
-    const handoffActions = this.pendingHandoffActions.length
-      ? this.pendingHandoffActions
-      : this.opts.getHandoffActions(language);
+      : this.opts.getStarterSuggestions(userQuestion, responseLanguage)
+    ).filter((suggestion) => matchesLanguage(suggestion, responseLanguage));
+    const handoffActions = this.opts.getHandoffActions(responseLanguage);
+
+    this.currentAssistantMsg.setCopy(getAssistantMessageCopy(responseLanguage));
 
     this.currentAssistantMsg.setConfidence(this.pendingConfidence);
     if (this.pendingSources.length) this.currentAssistantMsg.setSources(this.pendingSources);
@@ -162,7 +166,7 @@ export class StreamResponseRenderer {
       handoffActions,
       feedbackEnabled: true,
       feedbackQuestion: userQuestion,
-      language,
+      language: responseLanguage,
     };
   }
 }

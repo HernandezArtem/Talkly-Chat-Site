@@ -1,18 +1,20 @@
-import { getWidgetCopy } from "../copy";
-import type { WidgetHistoryMessage, WidgetFeedbackPayload, WidgetConfig } from "../types";
+import type { ChatLanguage, HandoffAction } from "@chattr/shared";
+import { getAssistantMessageCopy, getWidgetCopy } from "../copy";
+import type { WidgetHistoryMessage, WidgetFeedbackPayload } from "../types";
 import type { ChatWindow } from "../ui/chat-window";
-import type { HandoffAction } from "@chattr/shared";
 
 export function restoreSessionMessages(opts: {
   messages: WidgetHistoryMessage[];
-  preferredLanguage: WidgetConfig["preferredLanguage"];
+  uiLanguage: ChatLanguage;
   chatWindow: ChatWindow;
   onSend: (question: string) => void;
   onHandoffAction: (action: HandoffAction) => void;
   onFeedbackSubmit: (payload: WidgetFeedbackPayload) => void;
 }) {
   for (const message of opts.messages) {
-    const copy = getWidgetCopy(message.language ?? opts.preferredLanguage);
+    const copy = message.role === "assistant"
+      ? getAssistantMessageCopy(message.language ?? opts.uiLanguage)
+      : getWidgetCopy(opts.uiLanguage);
     const component = opts.chatWindow.addMessage(message, copy);
 
     if (message.role !== "assistant") continue;
