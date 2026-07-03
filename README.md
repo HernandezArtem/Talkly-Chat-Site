@@ -1,4 +1,4 @@
-# Talkly
+# Talkly Chat
 
 **Самостоятельный AI-чат для сайта** — один тег `<script>`, ваш сервер, ваши данные, русский и английский из коробки.
 
@@ -8,7 +8,7 @@
 
 ## Что это
 
-Talkly — виджет чата, который встраивается на любой сайт и отвечает на вопросы посетителей на основе вашего контента (RAG), с защитой от prompt-injection и настраиваемым дизайном.
+Talkly Chat — виджет чата, который встраивается на любой сайт и отвечает на вопросы посетителей на основе вашего контента (RAG), с защитой от prompt-injection и настраиваемым дизайном.
 
 | Компонент | Описание |
 |-----------|----------|
@@ -58,7 +58,7 @@ pnpm seed-demo
   data-server="https://chat.ваш-домен.ru"
   data-language="ru"
   data-theme-primary="#7c3aed"
-  data-theme-title="Talkly"
+  data-theme-title="Talkly Chat"
   data-theme-avatar="https://ваш-сайт.ru/avatar.svg"
   defer
 ></script>
@@ -66,7 +66,7 @@ pnpm seed-demo
 
 | Атрибут | Назначение |
 |---------|------------|
-| `data-server` | **Обязательно.** URL вашего Talkly-сервера |
+| `data-server` | **Обязательно.** URL вашего сервера Talkly Chat |
 | `src` | Тот же сервер + `/widget.js` |
 | `data-language` | `ru` или `en` — язык по умолчанию |
 | `data-theme-primary` | Цвет акцента |
@@ -116,15 +116,15 @@ pnpm onboard   # выберите ollama
 ## Docker
 
 ```bash
-docker build -t talkly .
+docker build -t talkly-chat .
 
 docker run -p 3000:3000 \
   -e OPENAI_API_KEY=sk-... \
-  -v talkly-data:/app/data \
-  talkly
+  -v talkly-chat-data:/app/data \
+  talkly-chat
 ```
 
-При первом запуске контейнер сам загрузит демо-контент в базу (если есть API-ключ). Данные сохраняются в volume `talkly-data`.
+При первом запуске контейнер сам загрузит демо-контент в базу (если есть API-ключ). Данные сохраняются в volume `talkly-chat-data`.
 
 ---
 
@@ -148,10 +148,4 @@ packages/widget/      # виджет чата (IIFE bundle)
 packages/shared/      # типы, язык, общие утилиты
 ```
 
-Конфиг тенанта: `apps/server/src/instance/default/chattr.config.ts`
-
----
-
-## Лицензия
-
-[MIT](LICENSE)
+Конфиг тенанта: `apps/server/src/instance/default/Talkly.config.ts`
