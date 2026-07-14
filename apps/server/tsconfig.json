@@ -2,6 +2,8 @@
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "outDir": "dist",
+    "rootDir": "../..",
+    "ignoreDeprecations": "6.0",
     "lib": ["ES2022"],
     "paths": {
       "@talkly/shared": ["packages/shared/src/index.ts"],
